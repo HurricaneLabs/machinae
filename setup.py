@@ -15,6 +15,7 @@ setup(
         "dnspython3",
         "ipwhois",
         "requests",
+        "stopit",
         "pyyaml",
     ],
     entry_points={
