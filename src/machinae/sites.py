@@ -176,21 +176,19 @@ class JsonApi(HttpSite):
         if "regex" in parser:
             rex = re.compile(parser["regex"], flags=re.I)
 
+        if key == "@" and mm_key is not None:
+            yield {key: mm_key}
+            raise StopIteration
+
+        values = cls.get_value(data, key)
+        if values is None:
+            raise StopIteration
+
         if not parser.get("match_all", False):
-            data = [data]
+            values = [values]
 
-        for item in data:
-            # item should be a dict, I think
+        for val in values:
             result_dict = OrderedDict()
-
-            if key == "@" and mm_key is not None:
-                result_dict[key] = mm_key
-                yield result_dict
-                continue
-
-            val = cls.get_value(item, key)
-            if val is None:
-                continue
 
             if rex:
                 try:
@@ -201,9 +199,9 @@ class JsonApi(HttpSite):
                     msg += "    [-] Regex: {0}\n".format(str(parser["regex"]))
                     msg += "    [-] Value: {0}\n".format(str(val))
                     sys.stderr.write(msg)
-                    continue
+                    raise StopIteration
                 if not m:
-                    continue
+                    raise StopIteration
                 if len(m.groups()) > 0:
                     val = m.groups()
                     if len(val) == 1:
@@ -271,9 +269,6 @@ class JsonApi(HttpSite):
             if target is None:
                 return []
             result_iter = cls.multi_match_generator(target, parser["multi_match"], parser["key"])
-        elif parser.get("match_all", False):
-            print("shoulda done something here")
-            result_iter = cls.get_result_dicts(data, parser)
         else:
             result_iter = cls.get_result_dicts(data, parser)
 

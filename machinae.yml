@@ -693,10 +693,24 @@ domaintools_parsed_whois:
         pretty_name: Whois Contacts
       - key: response.parsed_whois.created_date
         pretty_name: Domain registered
+        regex: '(\d{4}\-\d{1,2}\-\d{1,2})'
       - key: response.parsed_whois.updated_date
         pretty_name: Whois updated
+        regex: '(\d{4}\-\d{1,2}\-\d{1,2})'
       - key: response.parsed_whois.expired_date
         pretty_name: Domain expiration
+        regex: '(\d{4}\-\d{1,2}\-\d{1,2})'
+      - key: response.parsed_whois.name_servers
+        pretty_name: Name Servers
+        #match_all: true
+      - key: response.parsed_whois.registrar
+        pretty_name: Registrar Info
+        multi_match:
+          keys:
+            - name
+            - abuse_contact_phone
+            - abuse_contact_email
+            - url
 domaintools_reverse_whois:
   name: DomainTools Reverse Whois
   default: false
@@ -719,3 +733,23 @@ domaintools_reverse_whois:
         pretty_name: Currently active registered domains
       - key: response.domain_count.historic
         pretty_name: All registered domains
+
+domaintools_reputation:
+  name: DomainTools Reputation
+  default: false
+  otypes:
+  - fqdn
+  json:
+    request:
+      url: 'https://api.domaintools.com/v1/reputation/'
+      method: get
+      params:
+        domain: '{target}'
+        include_reasons: 'true'
+        api_username:
+        api_key:
+    results:
+    - key: response.risk_score
+      pretty_name: Risk Score
+    - key: response.reasons
+      pretty_name: Reasons
