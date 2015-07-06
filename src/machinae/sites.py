@@ -130,7 +130,7 @@ class HttpSite(Site):
 class JsonApi(HttpSite):
     @staticmethod
     def get_value(data, key):
-        if key == "@":
+        if key == "@" or data is None:
             return data
         ret = data
         key_parts = key.split(".")
@@ -167,7 +167,7 @@ class JsonApi(HttpSite):
         return results
 
     @classmethod
-    def get_result_dicts(cls, data, parser):
+    def get_result_dicts(cls, data, parser, mm_key=None, onlyif=None):
         if not hasattr(parser, "items"):
             parser = {"key": parser}
 
@@ -181,12 +181,17 @@ class JsonApi(HttpSite):
 
         for item in data:
             # item should be a dict, I think
-            if item is None or key not in item or item[key] is None:
-                continue
-
             result_dict = OrderedDict()
 
-            val = item[key]
+            if key == "@" and mm_key is not None:
+                result_dict[key] = mm_key
+                yield result_dict
+                continue
+
+            val = cls.get_value(item, key)
+            if val is None:
+                continue
+
             if rex:
                 try:
                     m = rex.search(val)
@@ -221,19 +226,6 @@ class JsonApi(HttpSite):
         if onlyif is not None and not hasattr(onlyif, "items"):
             onlyif = {"key": onlyif}
 
-        if onlyif is not None:
-            value = data.get(onlyif["key"], None)
-
-            if value is None:
-                raise StopIteration
-            elif "regex" in onlyif:
-                rex = re.compile(onlyif["regex"], re.I)
-                if not rex.search(value):
-                    raise StopIteration
-            else:
-                if not bool(value):
-                    raise StopIteration
-
         # Decide how to iterate on the data
         # Options are:
         #   Return result_dict per match in dict (if: data is dict)
@@ -247,9 +239,23 @@ class JsonApi(HttpSite):
             data = data.items()
 
         for (k, v) in data:
+            if onlyif is not None:
+                if not hasattr(onlyif, "items"):
+                    onlyif = {"key": onlyif}
+                value = v.get(onlyif["key"], None)
+
+                if value is None:
+                    continue
+                elif "regex" in onlyif:
+                    rex = re.compile(onlyif["regex"], re.I)
+                    if not rex.search(value):
+                        continue
+                else:
+                    if not bool(value):
+                        continue
             result_dict = OrderedDict()
             for mm_parser in parser["keys"]:
-                for mm_result_dict in cls.get_result_dicts(v, mm_parser):
+                for mm_result_dict in cls.get_result_dicts(v, mm_parser, mm_key=k, onlyif=onlyif):
                     result_dict.update(mm_result_dict)
 
             if len(result_dict) > 0:

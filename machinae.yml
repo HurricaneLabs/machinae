@@ -669,53 +669,53 @@ totalhash_ip:
           - thip_hash
           - thip_date
         pretty_name: Totalhash
-# domaintools_parsed_whois:
-#   name: DomainTools Whois
-#   default: false
-#   otypes:
-#     - fqdn
-#   json:
-#     request:
-#       url: 'https://api.domaintools.com/v1/{target}/whois/parsed'
-#       method: get
-#       params:
-#         api_username:
-#         api_key:
-#     results:
-#       - key: response.parsed_whois.contacts
-#         multi_match:
-#           keys:
-#             - '@'
-#             - name
-#             - country
-#             - email
-#           onlyif: name
-#         pretty_name: Whois Contacts
-#       - key: response.parsed_whois.created_date
-#         pretty_name: Domain registered
-#       - key: response.parsed_whois.updated_date
-#         pretty_name: Whois updated
-#       - key: response.parsed_whois.expired_date
-#         pretty_name: Domain expiration
-# domaintools_reverse_whois:
-#   name: DomainTools Reverse Whois
-#   default: false
-#   otypes:
-#     - email
-#   json:
-#     request:
-#       url: 'https://api.domaintools.com/v1/reverse-whois/'
-#       method: get
-#       params:
-#         terms: '{target}'
-#         mode: purchase
-#         api_username:
-#         api_key:
-#     results:
-#       - key: response.domains
-#         match_all: true
-#         pretty_name: Registered domain
-#       - key: reponse.domain_count.current
-#         pretty_name: Currently active registered domains
-#       - key: response.domain_count.historic
-#         pretty_name: All registered domains
+domaintools_parsed_whois:
+  name: DomainTools Whois
+  default: false
+  otypes:
+    - fqdn
+  json:
+    request:
+      url: 'https://api.domaintools.com/v1/{target}/whois/parsed'
+      method: get
+      params:
+        api_username:
+        api_key:
+    results:
+      - key: response.parsed_whois.contacts
+        multi_match:
+          keys:
+            - '@'
+            - name
+            - country
+            - email
+          onlyif: name
+        pretty_name: Whois Contacts
+      - key: response.parsed_whois.created_date
+        pretty_name: Domain registered
+      - key: response.parsed_whois.updated_date
+        pretty_name: Whois updated
+      - key: response.parsed_whois.expired_date
+        pretty_name: Domain expiration
+domaintools_reverse_whois:
+  name: DomainTools Reverse Whois
+  default: false
+  otypes:
+    - email
+  json:
+    request:
+      url: 'https://api.domaintools.com/v1/reverse-whois/'
+      method: get
+      params:
+        terms: '{target}'
+        mode: purchase
+        api_username:
+        api_key:
+    results:
+      - key: response.domains
+        match_all: true
+        pretty_name: Registered domain
+      - key: reponse.domain_count.current
+        pretty_name: Currently active registered domains
+      - key: response.domain_count.historic
+        pretty_name: All registered domains
