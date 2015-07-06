@@ -1,6 +1,5 @@
 ipwhois:
   name: IP Whois
-  default: false
   otypes:
     - ipv4
   ipwhois:
