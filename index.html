@@ -51,8 +51,44 @@ extraneous output optional</li>
 <pre><code>pip3 install git+https://github.com/HurricaneLabs/machinae.git
 </code></pre>
 
+<p>You will need to have whatever dependencies are required on your system for
+compiling Python modules (on Debian based systems, <code>python3-dev</code>), as well as
+the libyaml development package (on Debian based systems, <code>libyaml-dev</code>).</p>
+
 <p>You'll also want to grab the <a href="https://github.com/HurricaneLabs/machinae/raw/master/machinae.yml">latest configuration file</a> and place it in
 <code>/etc/machinae.yml</code>.</p>
+
+<h2>
+<a id="configuration-file" class="anchor" href="#configuration-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configuration File</h2>
+
+<p>Machinae supports a simple configuration merging system to allow you to make
+adjustments to the configuration without modifying the machinae.yml we provide
+you, making configuration updates a snap. This is done by finding a system-wide
+default configuration (default <code>/etc/machinae.yml</code>), merging into that a
+system-wide local configuration (<code>/etc/machinae.local.yml</code>) and finally a
+per-user local configuration (<code>~/.machinae.yml</code>). The system-wide configuration
+can also be located in the current working directory, can be set using the
+<code>MACHINAE_CONFIG</code> environment variable, or of course by using the <code>-c</code> or
+<code>--config</code> command line options. Configuration merging can be disabled by
+passing the <code>--nomerge</code> option, which will cause Machinae to only load the
+default system-wide configuration (or the one passed on the command line).</p>
+
+<p>As an example of this, say you'd like to enable the Fortinet Category site,
+which is disabled by default. You could modify <code>/etc/machinae.yml</code>, but these
+changes would be overwritten by an update. Instead, you can put the following
+in either <code>/etc/machinae.local.yml</code> or <code>~/.machinae.yml</code>:</p>
+
+<pre><code>fortinet_classify:
+  default: true
+</code></pre>
+
+<p>Or, conversely, to disable a site, such as Virus Total pDNS:</p>
+
+<pre><code>vt_ip:
+  default: false
+vt_domain:
+  default: false
+</code></pre>
 
 <h2>
 <a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
@@ -65,17 +101,7 @@ extraneous output optional</li>
 </code></pre>
 
 <ul>
-<li><p>Machinae supports a simple configuration merging system to allow you to make
-adjustments to the configuration without modifying the machinae.yml we provide
-you, making configuration updates a snap. This is done by finding a system-wide
-default configuration (default <code>/etc/machinae.yml</code>), merging into that a
-system-wide local configuration (<code>/etc/machinae.local.yml</code>) and finally a
-per-user local configuration (<code>~/.machinae.yml</code>). The system-wide configuration
-can also be located in the current working directory, can be set using the
-<code>MACHINAE_CONFIG</code> environment variable, or of course by using the <code>-c</code> or
-<code>--config</code> command line options. Configuration merging can be disabled by
-passing the <code>--nomerge</code> option, which will cause Machinae to only load the
-default system-wide configuration (or the one passed on the command line).</p></li>
+<li><p>See above for details on the <code>-c</code>/<code>--config</code> and <code>--nomerge</code> options.</p></li>
 <li><p>Machinae supports a <code>-d</code>/<code>--delay</code> option, like Automater. However, Machinae
 uses 0 by default.</p></li>
 <li>
@@ -138,8 +164,8 @@ options listed above will be interpreted as targets.</p></li>
 <li>Malc0de</li>
 <li>SANS</li>
 <li>Telize GeoIP</li>
-<li>Fortinet Category (disabled by default)</li>
-<li>VirusTotal pDNS (via web scrape)</li>
+<li>Fortinet Category</li>
+<li>VirusTotal pDNS (via web scrape - commented out)</li>
 <li>VirusTotal pDNS (via JSON API)</li>
 <li>VirusTotal URL Report (via JSON API)</li>
 <li>VirusTotal File Report (via JSON API)</li>
@@ -152,12 +178,26 @@ options listed above will be interpreted as targets.</p></li>
 <li>Cymru MHR</li>
 <li>ICSI Certificate Notary</li>
 <li>TotalHash (disabled by default)</li>
-<li>DomainTools Whois (Requires API key)</li>
+<li>DomainTools Parsed Whois (Requires API key)</li>
 <li>DomainTools Reverse Whois (Requires API key)</li>
+<li>DomainTools Reputation</li>
 <li>IP WHOIS (Using RIR REST interfaces)</li>
 </ul>
 
 <p>With additional data sources on the way.</p>
+
+<h3>
+<a id="disabled-by-default" class="anchor" href="#disabled-by-default" aria-hidden="true"><span class="octicon octicon-link"></span></a>Disabled by default</h3>
+
+<p>The following sites are disabled by default</p>
+
+<ul>
+<li>Fortinet Category (<code>fortinet_classify</code>)</li>
+<li>TotalHash (<code>totalhash_ip</code>)</li>
+<li>DomainTools Parsed Whois (<code>domaintools_parsed_whois</code>)</li>
+<li>DomainTools Reverse Whois (<code>domaintools_reverse_whois</code>)</li>
+<li>DomainTools Reputation (<code>domaintools_reputation</code>)</li>
+</ul>
 
 <h2>
 <a id="output-formats" class="anchor" href="#output-formats" aria-hidden="true"><span class="octicon octicon-link"></span></a>Output Formats</h2>
