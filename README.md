@@ -35,16 +35,10 @@ You'll also want to grab the [latest configuration file][2] and place it in
 `/etc/machinae.yml`.
 
 
-Usage
------
+Configuration File
+------------------
 
-Machinae usage is very similar to Automater:
-
-    usage: machinae [-h] [-c CONFIG] [-d DELAY] [-f FILE] [--nomerge] [-o {D,J,N}]
-                    [-O {ipv4,ipv6,fqdn,email,sslfp,hash,url}] [-q] [-s SITES]
-                    targets [targets ...]
-
-- Machinae supports a simple configuration merging system to allow you to make
+Machinae supports a simple configuration merging system to allow you to make
 adjustments to the configuration without modifying the machinae.yml we provide
 you, making configuration updates a snap. This is done by finding a system-wide
 default configuration (default `/etc/machinae.yml`), merging into that a
@@ -55,6 +49,33 @@ can also be located in the current working directory, can be set using the
 `--config` command line options. Configuration merging can be disabled by
 passing the `--nomerge` option, which will cause Machinae to only load the
 default system-wide configuration (or the one passed on the command line).
+
+As an example of this, say you'd like to enable the Fortinet Category site,
+which is disabled by default. You could modify `/etc/machinae.yml`, but these
+changes would be overwritten by an update. Instead, you can put the following
+in either `/etc/machinae.local.yml` or `~/.machinae.yml`:
+
+    fortinet_classify:
+      default: true
+
+Or, conversely, to disable a site, such as Virus Total pDNS:
+
+    vt_ip:
+      default: false
+    vt_domain:
+      default: false
+
+
+Usage
+-----
+
+Machinae usage is very similar to Automater:
+
+    usage: machinae [-h] [-c CONFIG] [-d DELAY] [-f FILE] [--nomerge] [-o {D,J,N}]
+                    [-O {ipv4,ipv6,fqdn,email,sslfp,hash,url}] [-q] [-s SITES]
+                    targets [targets ...]
+
+- See above for details on the `-c`/`--config` and `--nomerge` options.
 
 - Machinae supports a `-d`/`--delay` option, like Automater. However, Machinae
 uses 0 by default.
@@ -103,8 +124,8 @@ Machinae comes with out-of-the-box support for the following data sources:
 - Malc0de
 - SANS
 - Telize GeoIP
-- Fortinet Category (disabled by default)
-- VirusTotal pDNS (via web scrape)
+- Fortinet Category
+- VirusTotal pDNS (via web scrape - commented out)
 - VirusTotal pDNS (via JSON API)
 - VirusTotal URL Report (via JSON API)
 - VirusTotal File Report (via JSON API)
@@ -117,11 +138,22 @@ Machinae comes with out-of-the-box support for the following data sources:
 - Cymru MHR
 - ICSI Certificate Notary
 - TotalHash (disabled by default)
-- DomainTools Whois (Requires API key)
+- DomainTools Parsed Whois (Requires API key)
 - DomainTools Reverse Whois (Requires API key)
+- DomainTools Reputation
 - IP WHOIS (Using RIR REST interfaces)
 
 With additional data sources on the way.
+
+### Disabled by default
+
+The following sites are disabled by default
+
+- Fortinet Category (`fortinet_classify`)
+- TotalHash (`totalhash_ip`)
+- DomainTools Parsed Whois (`domaintools_parsed_whois`)
+- DomainTools Reverse Whois (`domaintools_reverse_whois`)
+- DomainTools Reputation (`domaintools_reputation`)
 
 
 Output Formats
