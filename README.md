@@ -56,13 +56,13 @@ default system-wide configuration (or the one passed on the command line).
 uses 0 by default.
 
 - Machinae output is controlled by two arguments:
-  - `-o` controls the output format, and can be followed by a single character
-  to indicated the desired type of output:
-    - *N* is the default output ("Normal")
-    - *D* is the default output, but dot characters are replaced
-    - *J* is JSON output
-  - `-f`/`--file` specifies the file where output should be written. The default
-  is "-" for stdout.
+    - `-o` controls the output format, and can be followed by a single character
+	to indicated the desired type of output:
+		- *N* is the default output ("Normal")
+		- *D* is the default output, but dot characters are replaced
+		- *J* is JSON output
+	- `-f`/`--file` specifies the file where output should be written. The default
+	is "-" for stdout.
 
 - Machinae will attempt to auto-detect the type of target passed in (Machinae
 refers to targets as "observables" and the type as "otype"). This detection can
@@ -77,12 +77,12 @@ setting. To disable verbose mode, use `-q`
 - By default, Machinae will run through all services in the configuration that
 apply to each target's otype *and* are not marked as "default: false". To modify
 this behavior, you can:
-  - Pass a comma separated list of sites to run (use the top level key from the
-  configuration).
-  - Pass the special keyword `all` to run through all services *including* those
-  marked as "default: false"
+    - Pass a comma separated list of sites to run (use the top level key from the
+	configuration).
+	- Pass the special keyword `all` to run through all services *including* those
+	marked as "default: false"
 
-  Note that in both cases, `otype` validation is still applied.
+	Note that in both cases, `otype` validation is still applied.
 
 - Lastly, a list of targets should be passed. All arguments other than the
 options listed above will be interpreted as targets.
