@@ -27,6 +27,10 @@ Or, if you're feeling adventurous, can be installed directly from github:
 
     pip3 install git+https://github.com/HurricaneLabs/machinae.git
 
+You will need to have whatever dependencies are required on your system for
+compiling Python modules (on Debian based systems, `python3-dev`), as well as
+the libyaml development package (on Debian based systems, `libyaml-dev`).
+
 You'll also want to grab the [latest configuration file][2] and place it in
 `/etc/machinae.yml`.
 
