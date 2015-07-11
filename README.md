@@ -185,4 +185,4 @@ THE SOFTWARE.
 
 
 [1]: https://github.com/1aN0rmus/TekDefense-Automater
-[2]: https://raw.githubusercontent.com/HurricaneLabs/machinae/master/machinae.yml
+[2]: https://github.com/HurricaneLabs/machinae/raw/master/machinae.yml
