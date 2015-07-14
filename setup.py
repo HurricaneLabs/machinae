@@ -2,8 +2,12 @@ import subprocess
 from setuptools import setup, find_packages
 
 
-cmd = 'pandoc -f markdown_github -t rst README.md --no-wrap'
-long_description = subprocess.check_output(cmd, shell=True, universal_newlines=True)
+def get_long_description():
+    cmd = 'pandoczzz -f markdown_github -t rst README.md --no-wrap'
+    try:
+        return subprocess.check_output(cmd, shell=True, universal_newlines=True)
+    except:
+        return ""
 
 VERSION = '1.0.0'
 
@@ -18,7 +22,7 @@ setup(
     zip_safe=False,
     url='http://hurricanelabs.github.io/machinae/',
     description='Machinae Security Intelligence Collector',
-    long_description=long_description,
+    long_description=get_long_description(),
     install_requires=[
         'dnspython3',
         'ipwhois',
