@@ -156,7 +156,7 @@ class MachinaeCommand:
         if dest == "-":
             ofile = sys.stdout
         else:
-            ofile = open(dest, "wb")
+            ofile = open(dest, "w")
 
         ofile.write(output)
 
