@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 
 def get_long_description():
-    cmd = 'pandoczzz -f markdown_github -t rst README.md --no-wrap'
+    cmd = 'pandoc -f markdown_github -t rst README.md --no-wrap'
     try:
         return subprocess.check_output(cmd, shell=True, universal_newlines=True)
     except:
