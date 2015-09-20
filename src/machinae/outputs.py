@@ -89,10 +89,9 @@ class DotEscapedOutput(NormalOutput):
         return text
 
 
-class JsonOutput(MachinaeOutput):
+class JsonGenerator(MachinaeOutput):
     def run(self, result_sets):
-        self.init_buffer()
-
+        records = list()
         for row in result_sets:
             (target, otype, otype_detected) = row.target_info
 
@@ -111,6 +110,15 @@ class JsonOutput(MachinaeOutput):
                 for (k, v) in output["results"].items():
                     if len(v) == 1:
                         output["results"][k] = v[0]
-                self.print(json.dumps(output))
+                records.append(output)
+        return records
+
+
+class JsonOutput(JsonGenerator):
+    def run(self, result_sets):
+        self.init_buffer()
+
+        for record in super().run(result_sets):
+            self.print(json.dumps(record))
 
         return self._buffer.getvalue()
