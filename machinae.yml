@@ -56,6 +56,7 @@ spamhaus_ip:
     request:
       url: 'http://www.spamhaus.org/query/ip/{target}'
       method: get
+      strip_comments: true
     results:
       - regex: '<b><font color="red">\S+ is (listed in the \w+)</FONT></B>'
         values:

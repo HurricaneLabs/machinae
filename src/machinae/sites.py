@@ -349,8 +349,21 @@ class Webscraper(HttpSite):
             self._req(target, self.conf["setup"])
 
         r = self._req(target, self.conf["request"])
+        body = r.text
 
-        body = html.unescape(r.text)
+        strip_comments = str(self.conf["request"].get("strip_comments", False)).lower()
+        if strip_comments in ("1", "yes", "true"):
+            try:
+                from bs4 import BeautifulSoup, Comment
+            except:
+                pass
+            else:
+                soup = BeautifulSoup(r.text)
+                for comment in soup.find_all(text=lambda _: isinstance(_, Comment)):
+                    comment.extract()
+                body = str(soup)
+
+        body = html.unescape(body)
 
         results = list()
         if "results" not in self.conf:
