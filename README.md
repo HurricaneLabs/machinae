@@ -189,6 +189,10 @@ Upcoming Features
 Version History
 ---------------
 
+### Version 1.0.1 (2015-10-13) ###
+
+- Fixed a false-positive bug with Spamhaus (Github#10)
+
 ### Version 1.0.0 (2015-07-02) ###
 
 - Initial release

@@ -9,7 +9,7 @@ def get_long_description():
     except:
         return ""
 
-VERSION = '1.0.0'
+VERSION = '1.0.1'
 
 setup(
     name='machinae',
@@ -29,6 +29,7 @@ setup(
         'requests',
         'stopit',
         'pyyaml',
+        'beautifulsoup4',
     ],
     entry_points={
         'console_scripts': [
