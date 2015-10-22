@@ -30,6 +30,7 @@ setup(
         'stopit',
         'pyyaml',
         'beautifulsoup4',
+        'html5lib',
     ],
     entry_points={
         'console_scripts': [

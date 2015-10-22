@@ -7,6 +7,7 @@ from collections import OrderedDict
 
 import ipwhois
 import requests
+from bs4 import BeautifulSoup, Comment
 from requests.packages.urllib3 import exceptions
 
 from . import Result
@@ -353,15 +354,10 @@ class Webscraper(HttpSite):
 
         strip_comments = str(self.conf["request"].get("strip_comments", False)).lower()
         if strip_comments in ("1", "yes", "true"):
-            try:
-                from bs4 import BeautifulSoup, Comment
-            except:
-                pass
-            else:
-                soup = BeautifulSoup(r.text)
-                for comment in soup.find_all(text=lambda _: isinstance(_, Comment)):
-                    comment.extract()
-                body = str(soup)
+            soup = BeautifulSoup(r.text)
+            for comment in soup.find_all(text=lambda _: isinstance(_, Comment)):
+                comment.extract()
+            body = str(soup)
 
         body = html.unescape(body)
 
