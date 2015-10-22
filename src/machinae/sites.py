@@ -354,7 +354,7 @@ class Webscraper(HttpSite):
 
         strip_comments = str(self.conf["request"].get("strip_comments", False)).lower()
         if strip_comments in ("1", "yes", "true"):
-            soup = BeautifulSoup(r.text)
+            soup = BeautifulSoup(r.text, "html5lib")
             for comment in soup.find_all(text=lambda _: isinstance(_, Comment)):
                 comment.extract()
             body = str(soup)
