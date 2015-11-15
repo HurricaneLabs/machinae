@@ -205,14 +205,18 @@ sans:
       values:
         - sans_mindate
       pretty_name: SANS mindate
-geoip:
-  name: GeoIP
+telize:
+  name: Telize GeoIP
+  default: False
   otypes:
     - ipv4
   json:
     request:
-      url: 'https://www.telize.com/geoip/{target}'
+      url: 'https://telize-v1.p.mashape.com/geoip/{target}'
       method: get
+      headers:
+        X-Mashape-Key:
+        Accept: application/json
     results:
     - key: continent_code
       pretty_name: GeoIP Continent Code
