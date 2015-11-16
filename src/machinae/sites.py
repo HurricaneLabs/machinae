@@ -4,6 +4,7 @@ import re
 import sys
 import warnings
 from collections import OrderedDict
+from ipaddress import ip_address, summarize_address_range
 
 import ipwhois
 import requests
@@ -168,7 +169,7 @@ class JsonApi(HttpSite):
         return results
 
     @classmethod
-    def get_result_dicts(cls, data, parser, mm_key=None, onlyif=None):
+    def get_result_dicts(cls, data, parser, mm_key=None, onlyif=None, store_key=None):
         if not hasattr(parser, "items"):
             parser = {"key": parser}
 
@@ -208,7 +209,14 @@ class JsonApi(HttpSite):
                     if len(val) == 1:
                         val = val[0]
 
-            result_dict[key] = val
+            store_key = parser.get("store_key", key)
+            if "split" in parser:
+                val = val.split(parser["split"])
+                if len(val) == 1:
+                    val = val[0]
+                else:
+                    val = tuple(val)
+            result_dict[store_key] = val
 
             yield result_dict
 
@@ -339,9 +347,33 @@ class JsonApi(HttpSite):
 
 
 class IpWhois(JsonApi):
+    @staticmethod
+    def get_cidr(network):
+        networks = [str(net) for net in summarize_address_range(
+            ip_address(network["start_address"]),
+            ip_address(network["end_address"])
+        )]
+        if len(networks) == 1:
+            networks = networks[0]
+        return networks
+
     def get_json(self, target):
         obj = ipwhois.IPWhois(target)
-        return obj.lookup_rws()
+        try:
+            # import json
+            # print(json.dumps(obj.lookup_rdap(depth=2)))
+            # return obj.lookup_rdap(depth=2)
+            return obj.lookup_rws()
+        except AttributeError:
+            # rdap = obj.lookup_rdap(inc_raw=True)
+            # print(json.dumps(rdap))
+            # rdap["network"]["range"] = "{start_address} - {end_address}".format(**rdap["network"])
+            # rdap["network"]["cidr"] = self.get_cidr(rdap["network"])
+            # return rdap
+            # RDAP is a stupid format, use raw whois
+            raw = obj.lookup()
+            print(raw)
+            return raw
 
 
 class Webscraper(HttpSite):

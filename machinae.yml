@@ -38,16 +38,26 @@ ipwhois:
             - postal_code
             - country
         pretty_name: Registration Locality
+      # For when we use RWS
       - key: nets
         multi_match:
           keys:
-            - abuse_emails
+            - key: abuse_emails
+              split: "\n"
         pretty_name: Abuse Email
       - key: nets
         multi_match:
           keys:
-            - tech_emails
+            - key: tech_emails
+              split: "\n"
         pretty_name: Tech Email
+      # For when we fall back to regular whois
+      - key: nets
+        multi_match:
+          keys:
+            - key: emails
+              split: "\n"
+        pretty_name: Contacts
 spamhaus_ip:
   name: Spamhaus Zen BL
   otypes:

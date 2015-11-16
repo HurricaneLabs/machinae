@@ -9,7 +9,7 @@ def get_long_description():
     except:
         return ""
 
-VERSION = '1.0.2'
+VERSION = '1.0.3'
 
 setup(
     name='machinae',
@@ -25,7 +25,7 @@ setup(
     long_description=get_long_description(),
     install_requires=[
         'dnspython3',
-        'ipwhois',
+        'ipwhois<0.11',
         'requests',
         'stopit',
         'pyyaml',
