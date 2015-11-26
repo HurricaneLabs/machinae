@@ -52,13 +52,23 @@ class NormalOutput(MachinaeOutput):
                 else:
                     self.print("[+] {0} results".format(site["name"]))
                     for result in item.resultset:
-                        if len(result[0].values()) > 1:
+                        if len(result[0].values()) > 1 or hasattr(result[0], "labels"):
                             values = map(repr, result[0].values())
                             values = map(self.escape, values)
-                            output = "({0})".format(", ".join(values))
+                            if hasattr(result[0], "labels"):
+                                values = zip(result[0].labels, values)
+                                values = ["{0}: {1}".format(label, value) for (label, value) in values]
+                                output = ", ".join(values)
+
+                            if result[1] is not None:
+                                output = "({0})".format(", ".join(values))
                         else:
                             output = self.escape(list(result[0].values())[0])
-                        self.print("    [-] {1}: {0}".format(output, result[1]))
+
+                        if result[1] is not None:
+                            output = "{1}: {0}".format(output, result[1])
+
+                        self.print("    [-] {0}".format(output))
 
         return self._buffer.getvalue()
 

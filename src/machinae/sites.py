@@ -7,11 +7,17 @@ from collections import OrderedDict
 from ipaddress import ip_address, summarize_address_range
 
 import ipwhois
+import pytz
+import relatime
 import requests
 from bs4 import BeautifulSoup, Comment
+from tzlocal import get_localzone
 from requests.packages.urllib3 import exceptions
 
 from . import Result
+
+
+localtz = get_localzone()
 
 
 class Site:
@@ -108,7 +114,16 @@ class HttpSite(Site):
         # GET params
         params = conf.get("params", {}).copy()
         for (k, v) in params.items():
-            params[k] = str(v).format(**tdict)
+            if hasattr(v, "items"):
+                conf = params.pop(k)
+                if "relatime" in conf:
+                    dt = relatime.timeParser(conf["relatime"], timezone=str(localtz))
+                    target_tz = pytz.timezone(conf.get("timezone", "UTC"))
+                    dt = dt.astimezone(target_tz)
+                    dt = dt.replace(tzinfo=None)
+                    params[k] = dt.isoformat() + "Z"
+            else:
+                params[k] = str(v).format(**tdict)
         if len(params) > 0:
             kwargs["params"] = params
 
@@ -212,6 +227,8 @@ class JsonApi(HttpSite):
             store_key = parser.get("store_key", key)
             if "split" in parser:
                 val = val.split(parser["split"])
+
+            if "split" in parser or parser.get("format", None) == "as_list":
                 if len(val) == 1:
                     val = val[0]
                 else:
@@ -266,6 +283,7 @@ class JsonApi(HttpSite):
                     result_dict.update(mm_result_dict)
 
             if len(result_dict) > 0:
+                result_dict.labels = parser.get("labels", None)
                 yield result_dict
 
     @classmethod
@@ -283,7 +301,7 @@ class JsonApi(HttpSite):
 
         results = list()
         for result_dict in result_iter:
-            result = Result(result_dict, parser["pretty_name"])
+            result = Result(result_dict, parser.get("pretty_name", None))
             if result not in results:
                 results.append(result)
         return results
