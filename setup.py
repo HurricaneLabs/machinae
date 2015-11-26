@@ -31,6 +31,8 @@ setup(
         'pyyaml',
         'beautifulsoup4',
         'html5lib',
+        'relatime',
+        'tzlocal',
     ],
     entry_points={
         'console_scripts': [
