@@ -52,11 +52,12 @@ class NormalOutput(MachinaeOutput):
                 else:
                     self.print("[+] {0} results".format(site["name"]))
                     for result in item.resultset:
-                        if len(result[0].values()) > 1 or result[0].get("labels", None) is not None:
+                        labels = getattr(result[0], "labels", None)
+                        if len(result[0].values()) > 1 or labels is not None:
                             values = map(repr, result[0].values())
                             values = map(self.escape, values)
-                            if result[0].get("labels", None) is not None:
-                                values = zip(result[0].labels, values)
+                            if labels is not None:
+                                values = zip(labels, values)
                                 values = ["{0}: {1}".format(label, value) for (label, value) in values]
                                 output = ", ".join(values)
 

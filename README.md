@@ -189,7 +189,7 @@ Upcoming Features
 Version History
 ---------------
 
-### Version 1.1.1 (2015-11-26) ###
+### Version 1.1.2 (2015-11-26) ###
 
 - New sites
     - Telize (premium) - GeoIP site (premium)
