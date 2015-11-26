@@ -189,6 +189,16 @@ Upcoming Features
 Version History
 ---------------
 
+### Version 1.1.1 (2015-11-26) ###
+
+- New sites
+  - Telize (premium) - GeoIP site (premium)
+  - Freegeoip - GeoIP site (free)
+  - CIF - CIFv2 API support, from csirtgadgets.org
+- New features
+  - Ability to specify labels for single-line multimatch JSON outputs
+  - Ability to specify relative time parameters using relatime library
+
 ### Version 1.0.1 (2015-10-13) ###
 
 - Fixed a false-positive bug with Spamhaus (Github#10)
