@@ -254,6 +254,33 @@ telize:
       pretty_name: GeoIP ASN
     - key: isp
       pretty_name: GeoIP ISP
+freegeoip:
+  name: freegeoip.net
+  otypes:
+    - ipv4
+    - fqdn
+  json:
+    request:
+      url: https://freegeoip.net/json/{target}
+    results:
+    - key: country_code
+      pretty_name: GeoIP Country Code
+    - key: country_name
+      pretty_name: GeoIP Country
+    - key: region_code
+      pretty_name: GeoIP Region Code
+    - key: region_name
+      pretty_name: GeoIP Region
+    - key: city
+      pretty_name: GeoIP City
+    - key: zip_code
+      pretty_name: GeoIP Zip Code
+    - key: latitude
+      pretty_name: GeoIP Latitude
+    - key: longitude
+      pretty_name: GeoIP Longitude
+    - key: time_zone
+      pretty_name: GeoIP Timezone
 fortinet_classify:
   name: Fortinet Category
   default: false
@@ -747,7 +774,6 @@ domaintools_reverse_whois:
         pretty_name: Currently active registered domains
       - key: response.domain_count.historic
         pretty_name: All registered domains
-
 domaintools_reputation:
   name: DomainTools Reputation
   default: false
@@ -767,3 +793,55 @@ domaintools_reputation:
       pretty_name: Risk Score
     - key: response.reasons
       pretty_name: Reasons
+
+cif:
+  name: Collective Intelligence Framework
+  default: false
+  otypes:
+  - ipv4
+  - fqdn
+  - email
+  - hash
+  json:
+    request:
+      url: 'https://cif/observables'
+      method: get
+      params:
+        nolog: 1
+        confidence: 75
+        observable: '{target}'
+        reporttime:
+          relatime: '-2d'
+          timezone: UTC
+        reporttimeend:
+          relatime: 'now'
+          timezone: UTC
+      headers:
+        Accept: application/vnd.cif.v2+json
+        Authorization: Token token=
+      verify_ssl: False
+    results:
+    - key: '@'
+      multi_match:
+        keys:
+          - asn
+          - cc
+        labels:
+          - AS Number
+          - Country Code
+    - key: '@'
+      multi_match:
+        keys:
+          - key: reporttime
+            regex: '^(\d+-\d+-\d+)T'
+          - confidence
+          - key: tags
+            format: as_list
+          - provider
+          - description
+        labels:
+          - Report Date
+          - Confidence
+          - Tags
+          - Provider
+          - Description
