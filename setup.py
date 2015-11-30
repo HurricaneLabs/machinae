@@ -33,6 +33,8 @@ setup(
         'html5lib',
         'relatime',
         'tzlocal',
+        'filemagic',
+        'feedparser',
     ],
     entry_points={
         'console_scripts': [

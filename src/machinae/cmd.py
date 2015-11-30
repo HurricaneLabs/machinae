@@ -6,7 +6,7 @@ from collections import OrderedDict
 import stopit
 
 from . import dict_merge, get_target_type, outputs, utils
-from . import ErrorResult, ResultSet, SiteResults, TargetInfo
+from . import ErrorResult, Result, ResultSet, SiteResults, TargetInfo
 from .sites import Site
 
 
@@ -91,11 +91,13 @@ class MachinaeCommand:
                 if otype.lower() not in map(lambda x: x.lower(), site_conf["otypes"]):
                     continue
 
-                scraper = Site.from_conf(site_conf, verbose=self.verbose)
+                site_conf["target"] = target
+                site_conf["verbose"] = self.args.verbose
+                scraper = Site.from_conf(site_conf)  # , verbose=self.verbose)
 
                 try:
                     with stopit.SignalTimeout(15, swallow_exc=False):
-                        run_results = scraper.run(target)
+                        run_results = [Result(r["value"], r["pretty_name"]) for r in scraper.run()]
                 except stopit.TimeoutException as e:
                     target_results.append(ErrorResult(target_info, site_conf, "Timeout"))
                 except Exception as e:
@@ -122,10 +124,6 @@ class MachinaeCommand:
         for target in self.args.targets:
             (otype, otype_detected) = self.detect_otype(target)
             yield TargetInfo(target, otype, otype_detected)
-
-    @property
-    def verbose(self):
-        return self.args.verbose
 
     def detect_otype(self, target):
         if self.args.otype:
