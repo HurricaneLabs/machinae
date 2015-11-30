@@ -88,7 +88,9 @@ class HttpSite(Site):
             conf = self.conf["request"]
 
         r = self._req(conf)
-        r.raise_for_status()
+        ignored_status_codes = [int(sc) for sc in conf.get("ignored_status_codes", [])]
+        if r.status_code not in ignored_status_codes:
+            r.raise_for_status()
         return r
 
     def build_result(self, parser, result_dict):
