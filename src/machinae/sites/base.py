@@ -4,9 +4,13 @@ import gzip
 import io
 import warnings
 import zipfile
+from collections import OrderedDict
 
 import magic
+import pytz
+import relatime
 import requests
+from tzlocal import get_localzone
 from requests.packages.urllib3 import exceptions
 
 from . import Site
@@ -62,11 +66,24 @@ class HttpSite(Site):
 
         # GET params
         params = conf.get("params", {}).copy()
+        for (k, v) in params.items():
+            if hasattr(v, "items"):
+                conf = params.pop(k)
+                if "relatime" in conf:
+                    dt = relatime.timeParser(conf["relatime"], timezone=str(get_localzone()))
+                    target_tz = pytz.timezone(conf.get("timezone", "UTC"))
+                    dt = dt.astimezone(target_tz)
+                    dt = dt.replace(tzinfo=None)
+                    params[k] = dt.isoformat() + "Z"
+            else:
+                params[k] = str(v).format(**self.kwargs)
         if len(params) > 0:
             kwargs["params"] = params
 
         # POST data
         data = conf.get("data", {})
+        for (k, v) in data.items():
+            data[k] = v.format(**self.kwargs)
         if len(data) > 0:
             kwargs["data"] = data
 
@@ -96,7 +113,7 @@ class HttpSite(Site):
     def build_result(self, parser, result_dict):
         defaults_dict = parser.get("defaults", {})
 
-        result = dict()
+        result = OrderedDict()
         result.update(defaults_dict)
         result.update(result_dict)
 

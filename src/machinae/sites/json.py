@@ -53,11 +53,11 @@ class JsonApi(HttpSite):
 
         if key == "@" and mm_key is not None:
             yield {key: mm_key}
-            raise StopIteration
+            return
 
         values = cls.get_value(data, key)
         if values is None:
-            raise StopIteration
+            return
 
         if not parser.get("match_all", False):
             values = [values]
@@ -68,17 +68,11 @@ class JsonApi(HttpSite):
             if rex:
                 m = rex.search(val)
                 if not m:
-                    raise StopIteration
+                    return
                 if len(m.groups()) > 0:
                     val = m.groups()
                     if len(val) == 1:
                         val = val[0]
-
-            if "values" in parser:
-                for (val_rex, val_replace) in parser["values"].items():
-                    if re.search(val_rex, val, flags=re.I):
-                        val = val_replace
-                        break
 
             result_dict[key] = val
 
@@ -92,7 +86,7 @@ class JsonApi(HttpSite):
                 for _ in cls.multi_match_generator(item, parser, mm_key="@"):
                     yield _
 
-            raise StopIteration
+            return
 
         onlyif = parser.get("onlyif", None)
         if onlyif is not None and not hasattr(onlyif, "items"):
@@ -102,7 +96,7 @@ class JsonApi(HttpSite):
         # Options are:
         #   Return result_dict per match in dict (if: data is dict)
         #   Return one result_dict for whole dict (if: data is dict)
-        if mm_key == "@":
+        if mm_key == "@" or parser.get("match_all", False):
             # Treat the entire data as a single match
             # Returns a single result_dict
             data = [(None, data)]
