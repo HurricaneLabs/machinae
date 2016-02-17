@@ -77,8 +77,8 @@ class NormalOutput(MachinaeOutput):
 class DotEscapedOutput(NormalOutput):
     escapes = {
         ".": "\u2024",
-        #".": "<dot>",
-        #".": " DOT ",
+        # ".": "<dot>",
+        # ".": " DOT ",
         "@": " AT ",
         "http://": "",
         "https://": "",

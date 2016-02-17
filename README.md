@@ -189,6 +189,16 @@ Upcoming Features
 Version History
 ---------------
 
+### Version 1.2.0 (2016-02-16) ###
+
+- New features
+    - Support for sites returning multiple JSON documents
+    - Ability to specify time format for relative time parameters
+    - Ability to parse Unix timestamps in results and display in ISO-8601 format
+    - Ability to specify status codes to ignore per-API
+- New sites
+    - DNSDB - FarSight Security Passive DNS Data base (premium)
+
 ### Version 1.1.2 (2015-11-26) ###
 
 - New sites

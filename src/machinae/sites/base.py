@@ -74,7 +74,11 @@ class HttpSite(Site):
                     target_tz = pytz.timezone(conf.get("timezone", "UTC"))
                     dt = dt.astimezone(target_tz)
                     dt = dt.replace(tzinfo=None)
-                    params[k] = dt.isoformat() + "Z"
+                    time_format = conf.get("format", "%Y-%m-%dT%H:%M:%S.%fZ")
+                    if time_format.lower() == "as_epoch":
+                        params[k] = str(int(dt.timestamp()))
+                    else:
+                        params[k] = dt.strftime(time_format)
             else:
                 params[k] = str(v).format(**self.kwargs)
         if len(params) > 0:
@@ -143,6 +147,12 @@ class HttpSite(Site):
                 result[k] = v
 
         if "pretty_name" in parser:
-            result = {"value": result, "pretty_name": parser["pretty_name"]}
+            result = OrderedDict([
+                ("value", result),
+                ("pretty_name", parser["pretty_name"])
+            ])
+
+        if hasattr(result_dict, "labels"):
+            result.labels = result_dict.labels
 
         return result

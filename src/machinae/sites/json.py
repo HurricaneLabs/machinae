@@ -1,7 +1,11 @@
 from __future__ import absolute_import
 
+import datetime
+import json
 import re
 from collections import OrderedDict
+
+from dateutil.parser import parse
 
 from .base import HttpSite
 
@@ -21,7 +25,20 @@ class JsonApi(HttpSite):
 
     def get_json(self):
         r = self.get_content()
-        return r.json()
+
+        ignored_status_codes = [int(sc) for sc in self.conf["request"].get("ignored_status_codes", [])]
+        if r.status_code in ignored_status_codes:
+            return []
+
+        if not self.conf.get("multi_json", "true"):
+            return r.json()
+
+        results = list()
+        for json_line in r.text.split("\n"):
+            if not json_line:
+                break
+            results.append(json.loads(json_line))
+        return results
 
     def run(self):
         data = self.get_json()
@@ -74,6 +91,15 @@ class JsonApi(HttpSite):
                     if len(val) == 1:
                         val = val[0]
 
+            if "format" in parser:
+                if parser["format"] == "as_list":
+                    val = ", ".join(val)
+                elif parser["format"] == "as_time":
+                    try:
+                        dt = datetime.datetime.fromtimestamp(val)
+                    except:
+                        dt = parse(val)
+                    val = dt.isoformat()
             result_dict[key] = val
 
             yield result_dict
@@ -125,6 +151,7 @@ class JsonApi(HttpSite):
                     result_dict.update(mm_result_dict)
 
             if len(result_dict) > 0:
+                result_dict.labels = parser.get("labels", None)
                 yield result_dict
 
     def parse_dict(self, data, parser):

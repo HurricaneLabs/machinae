@@ -97,7 +97,11 @@ class MachinaeCommand:
 
                 try:
                     with stopit.SignalTimeout(15, swallow_exc=False):
-                        run_results = [Result(r["value"], r["pretty_name"]) for r in scraper.run()]
+                        run_results = list()
+                        for r in scraper.run():
+                            if "value" not in r:
+                                r = {"value": r, "pretty_name": None}
+                            run_results.append(Result(r["value"], r["pretty_name"]))
                 except stopit.TimeoutException as e:
                     target_results.append(ErrorResult(target_info, site_conf, "Timeout"))
                 except Exception as e:

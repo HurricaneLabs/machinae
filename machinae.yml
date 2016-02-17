@@ -793,7 +793,71 @@ domaintools_reputation:
       pretty_name: Risk Score
     - key: response.reasons
       pretty_name: Reasons
-
+dnsdb_ip:
+  name: Farsight DNSDB
+  default: False
+  otypes:
+  - ipv4
+  - ipv6
+  json:
+    multi_json: true
+    request:
+      url: 'https://api.dnsdb.info/lookup/rdata/ip/{target}'
+      method: get
+      headers:
+        Accept: application/json
+        X-Api-Key:
+    results:
+    - key: '@'
+      multi_match:
+        keys:
+          - rrname
+          - rrtype
+          - key: time_first
+            format: as_time
+          - key: time_last
+            format: as_time
+        labels:
+          - Record Name
+          - Record Type
+          - First Seen
+          - Last Seen
+dnsdb_fqdn:
+  name: Farsight DNSDB
+  default: False
+  otypes:
+  - fqdn
+  json:
+    multi_json: true
+    request:
+      url: 'https://api.dnsdb.info/lookup/rrset/name/{target}'
+      method: get
+      ignored_status_codes:
+        - 404
+      params:
+        time_last_after:
+          relatime: '-7d'
+          timezone: UTC
+          format: as_epoch
+      headers:
+        Accept: application/json
+        X-Api-Key:
+    results:
+    - key: '@'
+      multi_match:
+        keys:
+          - rrtype
+          - key: rdata
+            # format: as_list
+          - key: time_last
+            format: as_time
+        labels:
+          - Record Type
+          - Record Data
+          - Last Seen
+        onlyif:
+          key: rrtype
+          regex: "^(A|AAAA|MX|SPF|TXT)$"
 cif:
   name: Collective Intelligence Framework
   default: false
