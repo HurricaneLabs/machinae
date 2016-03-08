@@ -189,6 +189,15 @@ Upcoming Features
 Version History
 ---------------
 
+### Version 1.3.0 (2016-03-07) ###
+
+- New sites
+    - Cymon.io - Threat intel aggregator/tracker by eSentire
+- New features
+    - Support simple paginated responses
+    - Support url encoding 'target' in request URL
+    - Support url decoding values in results
+
 ### Version 1.2.0 (2016-02-16) ###
 
 - New features
