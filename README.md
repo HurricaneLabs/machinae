@@ -189,6 +189,11 @@ Upcoming Features
 Version History
 ---------------
 
+### Version 1.3.1 (2016-03-08) ###
+
+- New features
+    - Prepend "http://" to URL targets when not starting with http:// or https://
+
 ### Version 1.3.0 (2016-03-07) ###
 
 - New sites

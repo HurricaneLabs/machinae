@@ -127,6 +127,8 @@ class MachinaeCommand:
     def targets(self):
         for target in self.args.targets:
             (otype, otype_detected) = self.detect_otype(target)
+            if otype == "url" and not (target.startswith("http://") or target.startswith("https://")):
+                target = "http://{0}".format(target)
             yield TargetInfo(target, otype, otype_detected)
 
     def detect_otype(self, target):
