@@ -3,6 +3,7 @@ from __future__ import absolute_import
 import datetime
 import json
 import re
+import urllib.parse
 from collections import OrderedDict
 
 from dateutil.parser import parse
@@ -23,15 +24,18 @@ class JsonApi(HttpSite):
             ret = ret[key_part]
         return ret
 
-    def get_json(self):
-        r = self.get_content()
+    def get_json(self, url=None):
+        r = self.get_content(url=url)
 
         ignored_status_codes = [int(sc) for sc in self.conf["request"].get("ignored_status_codes", [])]
         if r.status_code in ignored_status_codes:
             return []
 
-        if not self.conf.get("multi_json", "true"):
+        if not self.conf.get("multi_json", False):
             return r.json()
+
+        if r.status_code in ignored_status_codes:
+            return []
 
         results = list()
         for json_line in r.text.split("\n"):
@@ -44,7 +48,15 @@ class JsonApi(HttpSite):
         data = self.get_json()
 
         if hasattr(data, "items"):
+            next_url = None
+            if self.conf.get("paginated", False):
+                next_url = data.get("next", None)
+
             data = [data]
+            while next_url:
+                next_data = self.get_json(url=next_url)
+                next_url = next_data.get("next", None)
+                data.append(next_data)
 
         if "results" not in self.conf:
             return
@@ -90,6 +102,14 @@ class JsonApi(HttpSite):
                     val = m.groups()
                     if len(val) == 1:
                         val = val[0]
+
+            urldecode = str(parser.get("urldecode", False)).lower()
+            if urldecode in ("1", "yes", "true"):
+                val = urllib.parse.unquote(val)
+            elif urldecode == "twice":
+                val = urllib.parse.unquote(
+                    urllib.parse.unquote(val)
+                )
 
             if "format" in parser:
                 if parser["format"] == "as_list":

@@ -51,11 +51,12 @@ class HttpSite(Site):
 
         return r
 
-    def _req(self, conf):
-        url = conf.get("url", "")
-        if url == "":
-            return
-        url = url.format(**self.kwargs)
+    def _req(self, conf, url=None):
+        if url is None:
+            url = conf.get("url", "")
+            if url == "":
+                return
+            url = url.format(**self.kwargs)
         method = conf.get("method", "get").upper()
 
         kwargs = dict()
@@ -104,11 +105,11 @@ class HttpSite(Site):
                 warnings.simplefilter("ignore", exceptions.InsecureRequestWarning)
             return self.session.send(req, verify=verify_ssl)
 
-    def get_content(self, conf=None):
+    def get_content(self, conf=None, url=None):
         if conf is None:
             conf = self.conf["request"]
 
-        r = self._req(conf)
+        r = self._req(conf, url)
         ignored_status_codes = [int(sc) for sc in conf.get("ignored_status_codes", [])]
         if r.status_code not in ignored_status_codes:
             r.raise_for_status()

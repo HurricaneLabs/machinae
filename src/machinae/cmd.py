@@ -102,7 +102,7 @@ class MachinaeCommand:
                             if "value" not in r:
                                 r = {"value": r, "pretty_name": None}
                             run_results.append(Result(r["value"], r["pretty_name"]))
-                except stopit.TimeoutException as e:
+                except stopit.TimeoutException:
                     target_results.append(ErrorResult(target_info, site_conf, "Timeout"))
                 except Exception as e:
                     target_results.append(ErrorResult(target_info, site_conf, e))
@@ -139,7 +139,7 @@ class MachinaeCommand:
         dest = self.args.file
 
         if len(self.conf) == 0:
-            sys.stderr.write("Warning: operating with a config file. This is probably not what "
+            sys.stderr.write("Warning: operating without a config file. This is probably not what "
                              "you want. To correct this, fetch a copy of the default "
                              "configuration file from https://github.com/hurricanelabs/machinae "
                              "and place it in /etc/machinae.yml or ~/.machinae.yml and run again."

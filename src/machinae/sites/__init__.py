@@ -1,5 +1,7 @@
 from __future__ import absolute_import
 
+import urllib.parse
+
 
 class Site(object):
     _session = None
@@ -21,6 +23,14 @@ class Site(object):
                 ptr_style = str(target_conf.get("ptr", False)).lower()
                 if ptr_style in ("1", "yes", "true"):
                     target = ".".join(reversed(target.split(".")))
+
+                urlencode = str(target_conf.get("urlencode", False)).lower()
+                if urlencode in ("1", "yes", "true"):
+                    target = urllib.parse.quote(target)
+                elif urlencode == "twice":
+                    target = urllib.parse.quote(
+                        urllib.parse.quote(target, safe="")
+                    )
 
                 if "format" in target_conf:
                     target = target_conf["format"] % (target,)

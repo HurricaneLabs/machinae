@@ -909,3 +909,119 @@ cif:
           - Tags
           - Provider
           - Description
+cymon_ip_events:
+  name: Cymon.io IP Events
+  otypes:
+  - ipv4
+  json:
+    paginated: true
+    request:
+      url: 'https://cymon.io/api/nexus/v1/ip/{target}/events/'
+      method: get
+      ignored_status_codes:
+        - 404
+    results:
+    - key: 'results'
+      pretty_name: Event
+      multi_match:
+        keys:
+          - title
+          - key: created
+            regex: '^(\d+-\d+-\d+)T'
+          - key: updated
+            regex: '^(\d+-\d+-\d+)T'
+        labels:
+          - Title
+          - Created
+          - Updated
+cymon_ip_domains:
+  name: Cymon.io IP Domains
+  otypes:
+  - ipv4
+  json:
+    request:
+      url: 'https://cymon.io/api/nexus/v1/ip/{target}/domains/'
+      method: get
+      ignored_status_codes:
+        - 404
+    results:
+    - key: 'results'
+      pretty_name: Domain
+      multi_match:
+        keys:
+          - name
+          - key: created
+            regex: '^(\d+-\d+-\d+)T'
+          - key: updated
+            regex: '^(\d+-\d+-\d+)T'
+        labels:
+          - Domain
+          - Created
+          - Updated
+cymon_ip_urls:
+  name: Cymon.io IP URLs
+  otypes:
+  - ipv4
+  json:
+    request:
+      url: 'https://cymon.io/api/nexus/v1/ip/{target}/urls/'
+      method: get
+      ignored_status_codes:
+        - 404
+    results:
+    - key: 'results'
+      pretty_name: URL
+      multi_match:
+        keys:
+          - location
+          - key: created
+            regex: '^(\d+-\d+-\d+)T'
+          - key: updated
+            regex: '^(\d+-\d+-\d+)T'
+        labels:
+          - Domain
+          - Created
+          - Updated
+cymon_domain:
+  name: Cymon.io Domain Lookup
+  otypes:
+  - fqdn
+  json:
+    request:
+      url: 'https://cymon.io/api/nexus/v1/domain/{target}'
+      method: get
+      ignored_status_codes:
+        - 404
+    results:
+    - key: 'sources'
+      pretty_name: Domain listed by
+      match_all: true
+    - key: 'ips'
+      pretty_name: Associated IP
+      regex: '^https://cymon.io/api/nexus/v1/ip/(.+)'
+      match_all: true
+    - key: 'urls'
+      pretty_name: Malicious URL
+      regex: '^https://cymon.io/api/nexus/v1/url/(.+)'
+      match_all: true
+      urldecode: twice
+cymon_url:
+  name: Cymon.io URL Lookup
+  otypes:
+  - url
+  json:
+    request:
+      url: 'https://cymon.io/api/nexus/v1/url/{target}'
+      method: get
+      ignored_status_codes:
+        - 404
+      target:
+        urlencode: twice
+    results:
+    - key: 'sources'
+      pretty_name: URL listed by
+      match_all: true
+    - key: 'ips'
+      pretty_name: Associated IP
+      regex: '^https://cymon.io/api/nexus/v1/ip/(.+)'
+      match_all: true
