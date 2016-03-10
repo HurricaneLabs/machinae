@@ -11,6 +11,8 @@ class MachinaeOutput:
             return JsonOutput()
         elif format.upper() == "D":
             return DotEscapedOutput()
+        elif format.upper() == "S":
+            return ShortOutput()
 
     @staticmethod
     def escape(text):
@@ -131,5 +133,25 @@ class JsonOutput(JsonGenerator):
 
         for record in super().run(result_sets):
             self.print(json.dumps(record))
+
+        return self._buffer.getvalue()
+
+
+class ShortOutput(MachinaeOutput):
+    def run(self, result_sets):
+        self.init_buffer()
+
+        for row in result_sets:
+            (target, otype, otype_detected) = row.target_info
+            self.print("[+] {0}".format(target))
+
+            for item in row.results:
+                site = item.site_info
+                if hasattr(item, "error_info"):
+                    self.print("    {0}: Error".format(site["name"]))
+                elif len(item.resultset) == 0:
+                    self.print("    {0}: No".format(site["name"]))
+                else:
+                    self.print("    {0}: Yes".format(site["name"]))
 
         return self._buffer.getvalue()

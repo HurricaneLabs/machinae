@@ -1,4 +1,5 @@
 import argparse
+import copy
 import os
 import sys
 from collections import OrderedDict
@@ -29,7 +30,8 @@ class MachinaeCommand:
 
             ap.add_argument("-d", "--delay", default=0)
             ap.add_argument("-f", "--file", default="-")
-            ap.add_argument("-o", dest="output", default="N", choices=("D", "J", "N"))
+            ap.add_argument("-i", "--infile", default=None)
+            ap.add_argument("-o", dest="output", default="N", choices=("D", "J", "N", "S"))
             ap.add_argument("-O", "--otype",
                             choices=("ipv4", "ipv6", "fqdn", "email", "sslfp", "hash", "url")
                             )
@@ -121,11 +123,18 @@ class MachinaeCommand:
             else:
                 sites = self.args.sites.lower().split(",")
             self._sites = OrderedDict([(k, v) for (k, v) in self.conf.items() if k in sites])
-        return self._sites
+        return copy.deepcopy(self._sites)
 
     @property
     def targets(self):
-        for target in self.args.targets:
+        targets = list()
+        if self.args.infile:
+            with open(self.args.infile, "r") as f:
+                targets.extend([line.strip() for line in f.readlines()])
+
+        targets.extend(self.args.targets)
+
+        for target in targets:
             (otype, otype_detected) = self.detect_otype(target)
             if otype == "url" and not (target.startswith("http://") or target.startswith("https://")):
                 target = "http://{0}".format(target)

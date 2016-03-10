@@ -189,6 +189,11 @@ Upcoming Features
 Version History
 ---------------
 
+### Version 1.3.2 (2016-03-10) ###
+- New features
+    - "Short" output mode - simply output yes/no/error for each site
+    - "-i"/"--infile" option for passing a file with list of targets
+
 ### Version 1.3.1 (2016-03-08) ###
 
 - New features
