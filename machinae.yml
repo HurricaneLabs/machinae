@@ -426,6 +426,7 @@ vt_hash:
   name: VirusTotal File Report
   otypes:
     - hash
+    - 'hash.sha256'
   json:
     request:
       url: https://www.virustotal.com/vtapi/v2/file/report
