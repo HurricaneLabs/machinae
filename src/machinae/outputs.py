@@ -112,17 +112,21 @@ class JsonGenerator(MachinaeOutput):
                 output = dict()
                 output["site"] = item.site_info["name"]
                 output["results"] = dict()
-                for result in item.resultset:
-                    if result.pretty_name not in output["results"]:
-                        output["results"][result.pretty_name] = list()
-                    values = list(result.value.values())
-                    if len(values) == 1:
-                        output["results"][result.pretty_name].append(values[0])
-                    elif len(values) > 1:
-                        output["results"][result.pretty_name].append(values)
-                for (k, v) in output["results"].items():
-                    if len(v) == 1:
-                        output["results"][k] = v[0]
+
+                if hasattr(item, "error_info"):
+                    output["results"] = {"error_info": item.error_info}
+                elif len(item.resultset) > 0:
+                    for result in item.resultset:
+                        if result.pretty_name not in output["results"]:
+                            output["results"][result.pretty_name] = list()
+                        values = list(result.value.values())
+                        if len(values) == 1:
+                            output["results"][result.pretty_name].append(values[0])
+                        elif len(values) > 1:
+                            output["results"][result.pretty_name].append(values)
+                    for (k, v) in output["results"].items():
+                        if len(v) == 1:
+                            output["results"][k] = v[0]
                 records.append(output)
         return records
 

@@ -189,6 +189,12 @@ Upcoming Features
 Version History
 ---------------
 
+### Version 1.3.3 (2016-03-28) ###
+- Bug fixes
+    - Correctly handle error results when outputting to JSON
+        - Closes #14
+        - Thanks Den1al for the bug report
+
 ### Version 1.3.2 (2016-03-10) ###
 - New features
     - "Short" output mode - simply output yes/no/error for each site
