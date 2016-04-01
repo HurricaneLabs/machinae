@@ -114,7 +114,7 @@ class JsonGenerator(MachinaeOutput):
                 output["results"] = dict()
 
                 if hasattr(item, "error_info"):
-                    output["results"] = {"error_info": item.error_info}
+                    output["results"] = {"error_info": str(item.error_info)}
                 elif len(item.resultset) > 0:
                     for result in item.resultset:
                         if result.pretty_name not in output["results"]:

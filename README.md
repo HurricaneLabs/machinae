@@ -189,6 +189,11 @@ Upcoming Features
 Version History
 ---------------
 
+### Version 1.3.4 (2016-04-01) ###
+- Bug fixes
+    - Convert exceptions to str when outputting to JSON
+        - Should actually close #14
+
 ### Version 1.3.3 (2016-03-28) ###
 - Bug fixes
     - Correctly handle error results when outputting to JSON
