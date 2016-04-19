@@ -37,6 +37,7 @@ class MachinaeCommand:
                             )
             ap.add_argument("-q", "--quiet", dest="verbose", default=True, action="store_false")
             ap.add_argument("-s", "--sites", default="default")
+            ap.add_argument("-a", "--auth")
             ap.add_argument("targets", nargs=argparse.REMAINDER)
 
             modes = ap.add_mutually_exclusive_group()
@@ -85,6 +86,10 @@ class MachinaeCommand:
 
     @property
     def results(self):
+        creds = None
+        if self.args.auth and os.path.isfile(self.args.auth):
+            with open(self.args.auth) as auth_f:
+                creds = utils.safe_load(auth_f.read())
         for target_info in self.targets:
             (target, otype, _) = target_info
 
@@ -95,7 +100,7 @@ class MachinaeCommand:
 
                 site_conf["target"] = target
                 site_conf["verbose"] = self.args.verbose
-                scraper = Site.from_conf(site_conf)  # , verbose=self.verbose)
+                scraper = Site.from_conf(site_conf, creds=creds)  # , verbose=self.verbose)
 
                 try:
                     with stopit.SignalTimeout(15, swallow_exc=False):

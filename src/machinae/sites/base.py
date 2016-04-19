@@ -92,6 +92,12 @@ class HttpSite(Site):
         if len(data) > 0:
             kwargs["data"] = data
 
+        # HTTP Basic Auth
+        if conf.get("auth") and self.creds:
+            creds = self.creds.get(conf["auth"])
+            if creds:
+                kwargs["auth"] = (creds.get("username"), creds.get("password"))
+
         # Auto decompress
         if conf.get("decompress", False):
             kwargs["hooks"] = {"response": self.unzip_content}

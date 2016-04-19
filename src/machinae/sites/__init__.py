@@ -7,8 +7,9 @@ class Site(object):
     _session = None
     _kwargs = None
 
-    def __init__(self, conf):
+    def __init__(self, conf, creds=None):
         self.conf = conf
+        self.creds = creds
 
     def kwargs_getter(self):
         return self._kwargs
