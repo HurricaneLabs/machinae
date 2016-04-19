@@ -93,10 +93,8 @@ class HttpSite(Site):
             kwargs["data"] = data
 
         # HTTP Basic Auth
-        if conf.get("auth") and self.creds:
-            creds = self.creds.get(conf["auth"])
-            if creds:
-                kwargs["auth"] = (creds.get("username"), creds.get("password"))
+        if conf.get("auth") and self.creds and self.creds.get(conf["auth"]):
+            kwargs["auth"] = tuple(self.creds[conf["auth"]])
 
         # Auto decompress
         if conf.get("decompress", False):
