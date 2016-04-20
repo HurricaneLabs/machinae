@@ -1051,3 +1051,170 @@ threatcrowd_ip_report:
     - key: 'hashes'
       pretty_name: Known Malware Hash
       match_all: true
+
+passivetotal_pdns:
+  name: PassiveTotal Passive DNS
+  default: False
+  otypes:
+    - fqdn
+    - ipv4
+  json:
+    request:
+      url: 'https://api.passivetotal.org/v2/dns/passive'
+      auth: passivetotal
+      params:
+        query: '{target}'
+      method: get
+      headers:
+        Accept: application/json
+      ignored_status_codes:
+        - 401
+    results:
+      - key: results
+        format: as_list
+        pretty_name: Results
+        multi_match:
+          keys:
+            - key: resolve
+      - key: queryValue
+        pretty_name: Query Value
+
+passivetotal_whois:
+  name: PassiveTotal Whois
+  default: False
+  otypes:
+    - fqdn
+  json:
+    request:
+      url: 'https://api.passivetotal.org/v2/whois'
+      auth: passivetotal
+      params:
+        query: '{target}'
+      method: get
+      headers:
+        Accept: application/json
+      ignored_status_codes:
+        - 401
+    results:
+      - key: registryUpdatedAt
+        pretty_name: Registry Updated At
+      - key: domain
+        pretty_name: Domain
+      - key: billing
+        pretty_name: Billing
+      - key: zone
+        pretty_name: Zone
+      - key: nameServers
+        pretty_name: Name Servers
+      - key: registered
+        pretty_name: Registered
+      - key: lastLoadedAt
+        pretty_name: Last Loaded At
+      - key: whoisServer
+        pretty_name: Whois Server
+      - key: contactEmail
+        pretty_name: Contact Email
+      - key: admin
+        pretty_name: Admin
+      - key: expiresAt
+        pretty_name: Expires At
+      - key: registrar
+        pretty_name: Registrar
+      - key: tech
+        pretty_name: Tech
+      - key: registrant
+        pretty_name: Registrant
+
+passivetotal_sslcert:
+  name: PassiveTotal SSL Certificate History
+  default: False
+  otypes:
+    - ipv4
+  json:
+    request:
+      url: 'https://api.passivetotal.org/v2/ssl-certificate/history'
+      auth: passivetotal
+      params:
+        query: '{target}'
+      method: get
+      headers:
+        Accept: application/json
+      ignored_status_codes:
+        - 401
+    results:
+      - key: results
+        multi_match:
+          keys:
+            - key: sha1
+              pretty_name: Sha1
+            - key: firstSeen
+              pretty_name: First Seen
+            - key: ipAddresses
+              pretty_name: Ip Addresses
+            - key: lastSeen
+              pretty_name: Last Seen
+        pretty_name: Results
+
+passivetotal_components:
+  name: PassiveTotal Components
+  default: False
+  otypes:
+    - fqdn
+  json:
+    request:
+      url: 'https://api.passivetotal.org/v2/host-attributes/components'
+      auth: passivetotal
+      params:
+        query: '{target}'
+      method: get
+      headers:
+        Accept: application/json
+      ignored_status_codes:
+        - 401
+    results:
+      - key: results
+        multi_match:
+          keys:
+          - key: category
+            pretty_name: Category
+          - key: hostname
+            pretty_name: Hostname
+          - key: lastSeen
+            pretty_name: Last Seen
+          - key: firstSeen
+            pretty_name: First Seen
+          - key: label
+            pretty_name: Label
+        pretty_name: Results
+
+passivetotal_trackers:
+  name: PassiveTotal Trackers
+  default: False
+  otypes:
+    - fqdn
+  json:
+    request:
+      url: 'https://api.passivetotal.org/v2/host-attributes/trackers'
+      auth: passivetotal
+      params:
+        query: '{target}'
+      method: get
+      headers:
+        Accept: application/json
+      ignored_status_codes:
+        - 401
+    results:
+      - key: results
+        multi_match:
+          keys:
+          - key: hostname
+            pretty_name: Hostname
+          - key: attributeType
+            pretty_name: Type
+          - key: attributeValue
+            pretty_name: Value
+          - key: lastSeen
+            pretty_name: Last Seen
+          - key: firstSeen
+            pretty_name: First Seen
+        pretty_name: Results
