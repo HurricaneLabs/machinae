@@ -145,6 +145,27 @@ Machinae comes with out-of-the-box support for the following data sources:
 
 With additional data sources on the way.
 
+HTTP Basic Authentication and Configuration
+-------------------------------------------
+
+Machinae supports HTTP Basic Auth for sites that require it through the `--auth/-a`
+flag. You will need to create a YAML file with your credentials, which will include
+a key to the site that requires the credentials and a list of two items, username
+and password or API key. For example, for the included PassiveTotal site this might
+look like:
+
+    passivetotal: ['myemail@example.com', 'my_api_key']
+
+Inside the site configuration under `request` you will see a key such as:
+
+    json:
+      request:
+        url: '...'
+        auth: passivetotal
+
+The `auth: passivetotal` points to the key inside the authentication config passed
+via the command line.
+
 ### Disabled by default
 
 The following sites are disabled by default
@@ -154,6 +175,11 @@ The following sites are disabled by default
 - DomainTools Parsed Whois (`domaintools_parsed_whois`)
 - DomainTools Reverse Whois (`domaintools_reverse_whois`)
 - DomainTools Reputation (`domaintools_reputation`)
+- PassiveTotal Passive DNS (`passivetotal_pdns`)
+- PassiveTotal Whois (`passivetotal_whois`)
+- PassiveTotal SSL Certificate History (`passivetotal_sslcert`)
+- PassiveTotal Host Attribute Components (`passivetotal_components`)
+- PassiveTotal Host Attribute Trackers (`passivetotal_trackers`)
 
 
 Output Formats
