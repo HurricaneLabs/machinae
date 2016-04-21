@@ -109,6 +109,11 @@ this behavior, you can:
 
 	Note that in both cases, `otype` validation is still applied.
 
+- Machinae supports passing an HTTP proxy on the command line using the
+`-H`/`--http-proxy` argument. If no proxy is specified, machinae will search the
+standard `HTTP_PROXY` and `HTTPS_PROXY` environment variables, as well as the
+less standard `http_proxy` and `https_proxy` environment variables.
+
 - Lastly, a list of targets should be passed. All arguments other than the
 options listed above will be interpreted as targets.
 
@@ -123,7 +128,7 @@ Machinae comes with out-of-the-box support for the following data sources:
 - URL Unshortener (http://www.toolsvoid.com/unshorten-url)
 - Malc0de
 - SANS
-- Telize GeoIP
+- FreeGeoIP (freegeoip.io)
 - Fortinet Category
 - VirusTotal pDNS (via web scrape - commented out)
 - VirusTotal pDNS (via JSON API)
@@ -171,6 +176,7 @@ via the command line.
 The following sites are disabled by default
 
 - Fortinet Category (`fortinet_classify`)
+- Telize Geo IP (`telize`)
 - TotalHash (`totalhash_ip`)
 - DomainTools Parsed Whois (`domaintools_parsed_whois`)
 - DomainTools Reverse Whois (`domaintools_reverse_whois`)
@@ -180,6 +186,9 @@ The following sites are disabled by default
 - PassiveTotal SSL Certificate History (`passivetotal_sslcert`)
 - PassiveTotal Host Attribute Components (`passivetotal_components`)
 - PassiveTotal Host Attribute Trackers (`passivetotal_trackers`)
+- MaxMind GeoIP2 Passive Insight (`maxmind`)
+- FraudGuard (`fraudguard`)
+- Shodan (`shodan`)
 
 
 Output Formats
@@ -214,6 +223,19 @@ Upcoming Features
 
 Version History
 ---------------
+
+### Version 1.4.0 (2016-04-20) ###
+- New features
+    - "-a"/"--auth" option for passing an auth config file
+        - Thanks johannestaas for the submission
+    - "-H"/"--http-proxy" option, and environment support, for HTTP proxies
+- New sites
+    - Passivetotal (various forms, thanks johannestaas)
+    - MaxMind
+    - FraudGuard
+    - Shodan
+- Updated sites
+    - FreeGeoIP (replaced freegeoip.net with freegeoip.io)
 
 ### Version 1.3.4 (2016-04-01) ###
 - Bug fixes

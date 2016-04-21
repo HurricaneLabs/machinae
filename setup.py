@@ -9,7 +9,7 @@ def get_long_description():
     except:
         return ""
 
-VERSION = '1.3.4'
+VERSION = '1.4.0'
 
 setup(
     name='machinae',
@@ -44,7 +44,7 @@ setup(
     classifiers=[
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3 :: Only',
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
     ],
     bugtrack_url='https://github.com/HurricaneLabs/machinae/issues',
 )
