@@ -1252,3 +1252,27 @@ passivetotal_trackers:
           - key: firstSeen
             pretty_name: First Seen
         pretty_name: Results
+fraudguard:
+  name: FraudGuard
+  default: False
+  otypes:
+    - ipv4
+  json:
+    request:
+      url: https://api.fraudguard.io/ip/{target}
+      auth: fraudguard
+    results:
+    - key: isocode
+      pretty_name: FraudGuard Country Code
+    - key: country
+      pretty_name: FraudGuard Country
+    - key: state
+      pretty_name: FraudGuard State
+    - key: city
+      pretty_name: FraudGuard City
+    - key: discover_date
+      pretty_name: FraudGuard Discovery Date
+    - key: threat
+      pretty_name: FraudGuard Threat Type
+    - key: risk_level
+      pretty_name: FraudGuard Risk Level
