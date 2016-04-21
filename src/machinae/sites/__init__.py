@@ -7,9 +7,10 @@ class Site(object):
     _session = None
     _kwargs = None
 
-    def __init__(self, conf, creds=None):
+    def __init__(self, conf, creds=None, proxies=None):
         self.conf = conf
         self.creds = creds
+        self.proxies = proxies
 
     def kwargs_getter(self):
         return self._kwargs

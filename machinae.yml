@@ -254,14 +254,47 @@ telize:
       pretty_name: GeoIP ASN
     - key: isp
       pretty_name: GeoIP ISP
+maxmind:
+  name: MaxMind GeoIP2 Precision
+  otypes:
+    - ipv4
+  json:
+    request:
+      url: https://geoip.maxmind.com/geoip/v2.1/insights/{target}
+      auth: maxmind
+    results:
+    - key: country.iso_code
+      pretty_name: MaxMind Country Code
+    - key: country.names.en
+      pretty_name: MaxMind Country
+    - key: subdivisions
+      multi_match:
+        keys:
+          - iso_code
+      pretty_name: MaxMind Region Code
+    - key: subdivisions
+      multi_match:
+        keys:
+          - names.en
+      pretty_name: MaxMind Region
+    - key: city.names.en
+      pretty_name: MaxMind City
+    - key: postal.code
+      pretty_name: MaxMind Zip Code
+    - key: location.latitude
+      pretty_name: MaxMind Latitude
+    - key: location.longitude
+      pretty_name: MaxMind Longitude
+    - key: location.time_zone
+      pretty_name: MaxMind Timezone
 freegeoip:
-  name: freegeoip.net
+  name: freegeoip.io
   otypes:
     - ipv4
     - fqdn
   json:
     request:
-      url: https://freegeoip.net/json/{target}
+      url: https://freegeoip.io/json/{target}
     results:
     - key: country_code
       pretty_name: GeoIP Country Code
