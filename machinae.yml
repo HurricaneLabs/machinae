@@ -1252,3 +1252,79 @@ passivetotal_trackers:
           - key: firstSeen
             pretty_name: First Seen
         pretty_name: Results
+fraudguard:
+  name: FraudGuard
+  default: False
+  otypes:
+    - ipv4
+  json:
+    request:
+      url: https://api.fraudguard.io/ip/{target}
+      auth: fraudguard
+    results:
+    - key: isocode
+      pretty_name: FraudGuard Country Code
+    - key: country
+      pretty_name: FraudGuard Country
+    - key: state
+      pretty_name: FraudGuard State
+    - key: city
+      pretty_name: FraudGuard City
+    - key: discover_date
+      pretty_name: FraudGuard Discovery Date
+    - key: threat
+      pretty_name: FraudGuard Threat Type
+    - key: risk_level
+      pretty_name: FraudGuard Risk Level
+shodan:
+  name: Shodan
+  default: False
+  otypes:
+    - ipv4
+  json:
+    request:
+      url: https://api.shodan.io/shodan/host/{target}
+      params:
+        key:
+    results:
+    - key: '@'
+      multi_match:
+        keys:
+          - asn
+          - org
+          - city
+          - region
+          - country_code
+          - postal_code
+      pretty_name: Shodan Organization
+    - key: hostnames
+      match_all: true
+      pretty_name: Shodan Hostnames
+    - key: isp
+      pretty_name: Shodan ISP
+    - key: data
+      multi_match:
+        keys:
+          - timestamp
+          - transport
+          - port
+          - product
+          - version
+      pretty_name: Shodan Ports
+    - key: data
+      multi_match:
+        keys:
+          - transport
+          - port
+          - ssl.versions
+        onlyif: ssl.versions
+      pretty_name: Shodan SSL Versions
+    - key: data
+      multi_match:
+        keys:
+          - transport
+          - port
+          - ssl.cert.subject.CN
+          - ssl.cert.fingerprint.sha256
+        onlyif: ssl.cert.fingerprint.sha256
+      pretty_name: Shodan SSL Certs

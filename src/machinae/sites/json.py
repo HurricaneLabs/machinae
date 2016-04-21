@@ -13,14 +13,14 @@ from .base import HttpSite
 
 class JsonApi(HttpSite):
     @staticmethod
-    def get_value(data, key):
+    def get_value(data, key, default=None):
         if key == "@" or data is None:
             return data
         ret = data
         key_parts = key.split(".")
         for key_part in key_parts:
             if key_part not in ret:
-                return None
+                return default
             ret = ret[key_part]
         return ret
 
@@ -113,7 +113,7 @@ class JsonApi(HttpSite):
 
             if "format" in parser:
                 if parser["format"] == "as_list":
-                    val = ", ".join(val)
+                    val = ", ".join(map(str, val))
                 elif parser["format"] == "as_time":
                     try:
                         dt = datetime.datetime.fromtimestamp(val)
@@ -154,7 +154,7 @@ class JsonApi(HttpSite):
             if onlyif is not None:
                 if not hasattr(onlyif, "items"):
                     onlyif = {"key": onlyif}
-                value = v.get(onlyif["key"], None)
+                value = cls.get_value(v, onlyif["key"], None)
 
                 if value is None:
                     continue
