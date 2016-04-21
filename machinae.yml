@@ -256,6 +256,7 @@ telize:
       pretty_name: GeoIP ISP
 maxmind:
   name: MaxMind GeoIP2 Precision
+  default: False
   otypes:
     - ipv4
   json:
