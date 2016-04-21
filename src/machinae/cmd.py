@@ -38,6 +38,7 @@ class MachinaeCommand:
             ap.add_argument("-q", "--quiet", dest="verbose", default=True, action="store_false")
             ap.add_argument("-s", "--sites", default="default")
             ap.add_argument("-a", "--auth")
+            ap.add_argument("-H", "--http-proxy", dest="http_proxy")
             ap.add_argument("targets", nargs=argparse.REMAINDER)
 
             modes = ap.add_mutually_exclusive_group()
@@ -90,6 +91,26 @@ class MachinaeCommand:
         if self.args.auth and os.path.isfile(self.args.auth):
             with open(self.args.auth) as auth_f:
                 creds = utils.safe_load(auth_f.read())
+
+        proxies = {}
+        if self.args.http_proxy:
+            proxies["http"] = self.args.http_proxy
+            proxies["https"] = self.args.http_proxy
+        else:
+            if "HTTP_PROXY" in os.environ:
+                proxies["http"] = os.environ["HTTP_PROXY"]
+            elif "http_proxy" in os.environ:
+                proxies["http"] = os.environ["http_proxy"]
+            if "HTTPS_PROXY" in os.environ:
+                proxies["https"] = os.environ["HTTPS_PROXY"]
+            elif "https_proxy" in os.environ:
+                proxies["https"] = os.environ["https_proxy"]
+
+        if "http" in proxies:
+            print("HTTP Proxy: {http}".format(**proxies), file=sys.stderr)
+        if "https" in proxies:
+            print("HTTPS Proxy: {https}".format(**proxies), file=sys.stderr)
+
         for target_info in self.targets:
             (target, otype, _) = target_info
 
@@ -100,7 +121,7 @@ class MachinaeCommand:
 
                 site_conf["target"] = target
                 site_conf["verbose"] = self.args.verbose
-                scraper = Site.from_conf(site_conf, creds=creds)  # , verbose=self.verbose)
+                scraper = Site.from_conf(site_conf, creds=creds, proxies=proxies)  # , verbose=self.verbose)
 
                 try:
                     with stopit.SignalTimeout(15, swallow_exc=False):

@@ -27,6 +27,8 @@ class HttpSite(Site):
         if self._session is None:
             self._session = requests.Session()
             self._session.headers.update({"User-Agent": "Vor/1.0 (Like CIF/2.0)"})
+            if self.proxies:
+                self._session.proxies = self.proxies
         return self._session
 
     @staticmethod
