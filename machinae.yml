@@ -255,13 +255,13 @@ telize:
     - key: isp
       pretty_name: GeoIP ISP
 freegeoip:
-  name: freegeoip.net
+  name: freegeoip.io
   otypes:
     - ipv4
     - fqdn
   json:
     request:
-      url: https://freegeoip.net/json/{target}
+      url: https://freegeoip.io/json/{target}
     results:
     - key: country_code
       pretty_name: GeoIP Country Code
