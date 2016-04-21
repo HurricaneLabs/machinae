@@ -11,7 +11,12 @@ import pytz
 import relatime
 import requests
 from tzlocal import get_localzone
-from requests.packages.urllib3 import exceptions
+try:
+    from requests.packages.urllib3 import exceptions
+except ImportError:
+    # Apparently, some linux distros strip the packages out of requests
+    # I'm not going to tell you what I think of that, just going to deal with it
+    from urllib3 import exceptions
 
 from . import Site
 
