@@ -6,7 +6,7 @@ from collections import OrderedDict
 
 import stopit
 
-from . import dict_merge, get_target_type, outputs, utils
+from . import dict_merge, get_target_type, get_related_targets, outputs, utils
 from . import ErrorResult, Result, ResultSet, SiteResults, TargetInfo
 from .sites import Site
 
@@ -21,6 +21,7 @@ default_config_locations = (
 class MachinaeCommand:
     _conf = None
     _sites = None
+    _recursive_sites = None
 
     def __init__(self, args=None):
         if args is None:
@@ -36,6 +37,7 @@ class MachinaeCommand:
                             choices=("ipv4", "ipv6", "fqdn", "email", "sslfp", "hash", "url")
                             )
             ap.add_argument("-q", "--quiet", dest="verbose", default=True, action="store_false")
+            ap.add_argument("-R", "--recursive-sites", default="none")
             ap.add_argument("-s", "--sites", default="default")
             ap.add_argument("-a", "--auth")
             ap.add_argument("-H", "--http-proxy", dest="http_proxy")
@@ -111,33 +113,59 @@ class MachinaeCommand:
         if "https" in proxies:
             print("HTTPS Proxy: {https}".format(**proxies), file=sys.stderr)
 
+        def run_site(site_name, site_conf, target, otype):
+            if otype.lower() not in map(lambda x: x.lower(), site_conf["otypes"]):
+                return None
+
+            site_conf["target"] = target
+            site_conf["verbose"] = self.args.verbose
+            scraper = Site.from_conf(site_conf, creds=creds, proxies=proxies)  # , verbose=self.verbose)
+
+            try:
+                with stopit.SignalTimeout(15, swallow_exc=False):
+                    run_results = list()
+                    for r in scraper.run():
+                        if "value" not in r:
+                            r = {"value": r, "pretty_name": None}
+                        run_results.append(Result(r["value"], r["pretty_name"]))
+            except stopit.TimeoutException:
+                return ErrorResult(target_info, site_conf, "Timeout")
+            except Exception as e:
+                return ErrorResult(target_info, site_conf, e)
+            else:
+                return SiteResults(site_conf, run_results)
+
         for target_info in self.targets:
             (target, otype, _) = target_info
 
             target_results = list()
             for (site_name, site_conf) in self.sites.items():
-                if otype.lower() not in map(lambda x: x.lower(), site_conf["otypes"]):
-                    continue
+                result = run_site(site_name, site_conf, target, otype)
+                if result:
+                    target_results.append(result)
 
-                site_conf["target"] = target
-                site_conf["verbose"] = self.args.verbose
-                scraper = Site.from_conf(site_conf, creds=creds, proxies=proxies)  # , verbose=self.verbose)
-
-                try:
-                    with stopit.SignalTimeout(15, swallow_exc=False):
-                        run_results = list()
-                        for r in scraper.run():
-                            if "value" not in r:
-                                r = {"value": r, "pretty_name": None}
-                            run_results.append(Result(r["value"], r["pretty_name"]))
-                except stopit.TimeoutException:
-                    target_results.append(ErrorResult(target_info, site_conf, "Timeout"))
-                except Exception as e:
-                    target_results.append(ErrorResult(target_info, site_conf, e))
-                else:
-                    target_results.append(SiteResults(site_conf, run_results))
+            if self.recursive_sites:
+                for (related_target, related_otype) in get_related_targets(target, otype):
+                    for (site_name, site_conf) in self.recursive_sites.items():
+                        result = run_site(site_name, site_conf, target, otype)
+                        if result:
+                            target_results.append(result)
 
             yield ResultSet(target_info, target_results)
+
+    @property
+    def recursive_sites(self):
+        if self._recursive_sites is None:
+            if self.args.recursive_sites.lower() == "all":
+                recursive_sites = self._conf.keys()
+            elif self.args.recursive_sites.lower() == "default":
+                recursive_sites = [k for (k, v) in self.conf.items() if v.get("default", True)]
+            elif self.args.recursive_sites.lower() == "none":
+                recursive_sites = []
+            else:
+                recursive_sites = self.args.recursive_sites.lower().split(",")
+            self._recursive_sites = OrderedDict([(k, v) for (k, v) in self.conf.items() if k in recursive_sites])
+        return copy.deepcopy(self._recursive_sites)
 
     @property
     def sites(self):
@@ -146,6 +174,8 @@ class MachinaeCommand:
                 sites = self._conf.keys()
             elif self.args.sites.lower() == "default":
                 sites = [k for (k, v) in self.conf.items() if v.get("default", True)]
+            elif self.args.sites.lower() == "none":
+                sites = []
             else:
                 sites = self.args.sites.lower().split(",")
             self._sites = OrderedDict([(k, v) for (k, v) in self.conf.items() if k in sites])

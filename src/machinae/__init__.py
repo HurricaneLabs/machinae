@@ -1,6 +1,7 @@
 import collections
 import re
 import socket
+from urllib.parse import urlparse
 
 
 TargetInfo = collections.namedtuple("TargetInfo", ("target", "otype", "otype_detected"))
@@ -8,6 +9,32 @@ ErrorResult = collections.namedtuple("ErrorResult", ("target_info", "site_info",
 ResultSet = collections.namedtuple("ResultSet", ("target_info", "results"))
 SiteResults = collections.namedtuple("SiteResults", ("site_info", "resultset"))
 Result = collections.namedtuple("Result", ("value", "pretty_name"))
+
+
+def get_related_targets(target, otype=None):
+    if otype is None:
+        otype = get_target_type(target)
+
+    targets = list()
+    if otype == "url":
+        u = urlparse(target)
+        hostname_otype = get_target_type(u.hostname)
+        targets.append((u.hostname, hostname_otype))
+        for related in get_related_targets(u.hostname, hostname_otype):
+            targets.append(related)
+    elif otype == "email":
+        (_, domain) = target.split("@", 1)
+        domain_otype = get_target_type(domain)  # Wonder if this is necessary
+        targets.append((domain, domain_otype))
+        for related in get_related_targets(domain, domain_otype):
+            targets.append(related)
+    elif otype == "fqdn":
+        for addr in socket.gethostbyname_ex(target)[2]:
+            addr_otype = get_target_type(addr)  # Wonder if this is necessary
+            targets.append((addr, addr_otype))
+            for related in get_related_targets(addr, addr_otype):
+                targets.append(related)
+    return targets
 
 
 def get_target_type(target):
