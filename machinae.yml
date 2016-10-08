@@ -1328,3 +1328,29 @@ shodan:
           - ssl.cert.fingerprint.sha256
         onlyif: ssl.cert.fingerprint.sha256
       pretty_name: Shodan SSL Certs
+ipinfoio:
+    name: ipinfo.io
+    default: False
+    otypes:
+        - ipv4
+        - ipv6
+    json:
+        request:
+            url: https://ipinfo.io/{target}
+            headers:
+                Accept: application/json
+        results:
+            - key: hostname
+              pretty_name: ipinfo.io hostname
+            - key: city
+              pretty_name: ipinfo.io city
+            - key: region
+              pretty_name: ipinfo.io region
+            - key: country
+              pretty_name: ipinfo.io country
+            - key: loc
+              pretty_name: ipinfo.io geolocation
+            - key: org
+              pretty_name: ipinfo.io organization
+            - key: postal
+              pretty_name: ipinfo.io postal code
