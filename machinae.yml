@@ -60,6 +60,7 @@ ipwhois:
         pretty_name: Contacts
 spamhaus_ip:
   name: Spamhaus Zen BL
+  default: False
   otypes:
     - ipv4
   webscraper:
@@ -74,6 +75,7 @@ spamhaus_ip:
         pretty_name: Spamhaus Zen BL
 spamhaus_domain:
   name: Spamhaus Domain BL
+  default: False
   otypes:
     - fqdn
   webscraper:
@@ -186,6 +188,27 @@ malc0de:
       values:
         - malc0de_md5
       pretty_name: MC MD5
+      
+AbuseIPDB:
+  name: AbuseIPDB
+  otypes:
+    - ipv4
+  webscraper:
+    request:
+      url: 'https://abuseipdb.com/check/{target}'
+      method: get
+    results:
+
+    - regex: '((?<=This\sIP\swas\sreported\s<b>)\d{1,3})'
+      values:
+        - AbuseIPReports
+      pretty_name: 'AbuseIPDB reports'
+
+    - regex: '((?<=most\srecent\sreport\swas\s<b>)\d{1,3}\s\w+\s\w+)'
+      values:
+        - Last_seen
+      pretty_name: 'Last seen'
+
 sans:
   name: SANS
   otypes:
@@ -290,9 +313,10 @@ maxmind:
       pretty_name: MaxMind Timezone
 freegeoip:
   name: freegeoip.io
+  default: true
   otypes:
     - ipv4
-    - fqdn
+#    - fqdn
   json:
     request:
       url: https://freegeoip.io/json/{target}
@@ -301,23 +325,23 @@ freegeoip:
       pretty_name: GeoIP Country Code
     - key: country_name
       pretty_name: GeoIP Country
-    - key: region_code
-      pretty_name: GeoIP Region Code
-    - key: region_name
-      pretty_name: GeoIP Region
+#    - key: region_code
+#      pretty_name: GeoIP Region Code
+#    - key: region_name
+#      pretty_name: GeoIP Region
     - key: city
       pretty_name: GeoIP City
-    - key: zip_code
-      pretty_name: GeoIP Zip Code
-    - key: latitude
-      pretty_name: GeoIP Latitude
-    - key: longitude
-      pretty_name: GeoIP Longitude
-    - key: time_zone
-      pretty_name: GeoIP Timezone
+#    - key: zip_code
+#      pretty_name: GeoIP Zip Code
+#    - key: latitude
+#      pretty_name: GeoIP Latitude
+#    - key: longitude
+#      pretty_name: GeoIP Longitude
+#    - key: time_zone
+#      pretty_name: GeoIP Timezone
 fortinet_classify:
   name: Fortinet Category
-  default: false
+  default: True
   otypes:
     - ipv4
     - fqdn
@@ -533,6 +557,7 @@ vxvault:
         pretty_name: URL found at VXVault
 projecthoneypot:
   name: ProjectHoneypot
+  default: False
   otypes:
     - ipv4
   webscraper:
@@ -946,6 +971,7 @@ cif:
           - Description
 cymon_ip_events:
   name: Cymon.io IP Events
+  default: True
   otypes:
   - ipv4
   json:
@@ -971,6 +997,7 @@ cymon_ip_events:
           - Updated
 cymon_ip_domains:
   name: Cymon.io IP Domains
+  default: True
   otypes:
   - ipv4
   json:
@@ -995,6 +1022,7 @@ cymon_ip_domains:
           - Updated
 cymon_ip_urls:
   name: Cymon.io IP URLs
+  default: True
   otypes:
   - ipv4
   json:
@@ -1019,6 +1047,7 @@ cymon_ip_urls:
           - Updated
 cymon_domain:
   name: Cymon.io Domain Lookup
+  default: True
   otypes:
   - fqdn
   json:
@@ -1042,6 +1071,7 @@ cymon_domain:
       urldecode: twice
 cymon_url:
   name: Cymon.io URL Lookup
+  default: True
   otypes:
   - url
   json:
@@ -1063,6 +1093,7 @@ cymon_url:
 
 threatcrowd_ip_report:
   name: ThreatCrowd IP Report
+  default: True
   otypes:
   - ipv4
   json:
