@@ -186,6 +186,49 @@ malc0de:
       values:
         - malc0de_md5
       pretty_name: MC MD5
+      
+AbuseIPDB:
+  name: AbuseIPDB
+  otypes:
+    - ipv4
+  webscraper:
+    request:
+      url: 'https://abuseipdb.com/check/{target}'
+      method: get
+    results:
+
+    - regex: '((?<=This\sIP\swas\sreported\s<b>)\d{1,3})'
+      values:
+        - AbuseIPReports
+      pretty_name: 'AbuseIPDB reports'
+
+    - regex: '((?<=most\srecent\sreport\swas\s<b>)\d{1,3}\s\w+\s\w+)'
+      values:
+        - Last_seen
+      pretty_name: 'Last seen'
+
+RansomwareTracker:
+  name: RansomwareTracker
+  otypes:
+    - ipv4
+  webscraper:
+    request:
+      url: 'https://ransomwaretracker.abuse.ch/host/{target}'
+      method: get
+    results:
+    - regex: '((?<=Host\sStatus:</th><td\scolspan="2"><span\sclass="buttonoffline">)\w+)'
+      values:
+        - Active
+      pretty_name: 'Host Status'
+    - regex: '((?<=</td><td>\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}</td><td>)\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2})'
+      values:
+        - Last_seen
+      pretty_name: 'Last seen'
+    - regex: '((?<=Malware:</th><td\scolspan="2">)\w+)'
+      values:
+        - ransomwareType
+      pretty_name: 'Ransomware Type'
+
 sans:
   name: SANS
   otypes:
