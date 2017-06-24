@@ -209,6 +209,28 @@ AbuseIPDB:
         - Last_seen
       pretty_name: 'Last seen'
 
+RansomwareTracker:
+  name: RansomwareTracker
+  otypes:
+    - ipv4
+  webscraper:
+    request:
+      url: 'https://ransomwaretracker.abuse.ch/host/{target}'
+      method: get
+    results:
+    - regex: '((?<=Host\sStatus:</th><td\scolspan="2"><span\sclass="buttonoffline">)\w+)'
+      values:
+        - Active
+      pretty_name: 'Host Status'
+    - regex: '((?<=</td><td>\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}</td><td>)\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2})'
+      values:
+        - Last_seen
+      pretty_name: 'Last seen'
+    - regex: '((?<=Malware:</th><td\scolspan="2">)\w+)'
+      values:
+        - ransomwareType
+      pretty_name: 'Ransomware Type'
+
 sans:
   name: SANS
   otypes:
