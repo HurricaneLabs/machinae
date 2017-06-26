@@ -188,7 +188,7 @@ malc0de:
       values:
         - malc0de_md5
       pretty_name: MC MD5
-      
+
 AbuseIPDB:
   name: AbuseIPDB
   otypes:
@@ -689,18 +689,18 @@ mcafee_threat_domain:
     - fqdn
   webscraper:
     request:
-      url: 'https://www.mcafee.com/threat-intelligence/domain/default.aspx?domain={target}&region=us'
+      url: 'https://www.mcafee.com/threat-intelligence/domain/default.aspx?domain={target}'
       method: get
     results:
-      - regex: 'ctl00_mainContent_imgRisk"[^\r\n]+title="([A-Za-z]+)"'
+      - regex: 'ctl00_breadcrumbContent_imgRisk"[^\r\n]+title="([A-Za-z]+)"'
         values:
           - mcafee_risk
         pretty_name: McAfee Web Risk
-      - regex: 'Web\sCategory:[\n\s]*</strong>[\n\s]*([A-Z][A-Za-z\s/,]+)<'
+      - regex: '<li>[\n\s]*Web\sCategory:[\n\s]*([A-Z][A-Za-z\s/,]+?)[\n\s]*</li>'
         values:
           - mcafee_category
         pretty_name: McAfee Web Category
-      - regex: 'Last\sSeen:[\n\s]*</strong>[\n\s]*([0-9\-]+)<'
+      - regex: '<li>[\n\s]*Last\sSeen:[\n\s]*([0-9\-]+)[\n\s]*</li>'
         values:
           - mcafee_last_seen
         pretty_name: McAfee Last Seen
@@ -710,22 +710,22 @@ mcafee_threat_ip:
     - ipv4
   webscraper:
     request:
-      url: 'https://www.mcafee.com/threat-intelligence/ip/default.aspx?ip={target}&region=us'
+      url: 'https://www.mcafee.com/threat-intelligence/ip/default.aspx?ip={target}'
       method: get
     results:
-      - regex: 'ctl00_mainContent_imgRisk"[^\r\n]+src="/img/Threat_IP/rep_([a-z]+)\.png"'
+      - regex: 'ctl00_breadcrumbContent_imgRisk"[^\r\n]+src="/img/Threat_IP/rep_([a-z]+)\.png"'
         values:
           - mcafee_risk
         pretty_name: McAfee Web Risk
-      - regex: 'ctl00_mainContent_imgRisk1"[^\r\n]+src="/img/Threat_IP/rep_([a-z]+)\.png"'
+      - regex: 'ctl00_breadcrumbContent_imgRisk1"[^\r\n]+src="/img/Threat_IP/rep_([a-z]+)\.png"'
         values:
           - mcafee_risk
         pretty_name: McAfee Email Risk
-      - regex: 'ctl00_mainContent_imgRisk2"[^\r\n]+src="/img/Threat_IP/rep_([a-z]+)\.png"'
+      - regex: 'ctl00_breadcrumbContent_imgRisk2"[^\r\n]+src="/img/Threat_IP/rep_([a-z]+)\.png"'
         values:
           - mcafee_risk
         pretty_name: McAfee Network Risk
-      - regex: 'Web\sCategory:[\n\s]*</strong>[\n\s]*([A-Z][A-Za-z\s/,]+)<'
+      - regex: '<li>[\n\s]*Web\sCategory:[\n\s]*([A-Z][A-Za-z\s/,]+?)[\n\s]*</li>'
         values:
           - mcafee_category
         pretty_name: McAfee Web Category
