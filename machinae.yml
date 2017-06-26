@@ -89,6 +89,7 @@ spamhaus_domain:
         pretty_name: Spamhaus DBL
 ipvoid:
   name: IPVoid
+  default: False
   otypes:
     - ipv4
   webscraper:
