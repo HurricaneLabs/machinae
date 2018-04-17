@@ -71,9 +71,11 @@ Usage
 
 Machinae usage is very similar to Automater:
 
-    usage: machinae [-h] [-c CONFIG] [-d DELAY] [-f FILE] [--nomerge] [-o {D,J,N}]
-                    [-O {ipv4,ipv6,fqdn,email,sslfp,hash,url}] [-q] [-s SITES]
-                    targets [targets ...]
+    usage: machinae [-h] [-c CONFIG] [--nomerge] [-d DELAY] [-f FILE] [-i INFILE]
+                [-o {D,J,N,S}] [-O {ipv4,ipv6,fqdn,email,sslfp,hash,url}] [-q]
+                [-s SITES] [-a AUTH] [-H HTTP_PROXY]
+                [--dump-config | --detect-otype]
+                ...
 
 - See above for details on the `-c`/`--config` and `--nomerge` options.
 
