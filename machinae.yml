@@ -1408,3 +1408,23 @@ ipinfoio:
               pretty_name: ipinfo.io organization
             - key: postal
               pretty_name: ipinfo.io postal code
+xforce-malware:
+    name: IBM XForce Malware Report
+    default: False
+    otypes:
+        - ipv4
+    json:
+        request:
+            url: https://api.xforce.ibmcloud.com/ipr/malware/{target}
+            auth: xforce
+        results:
+            - key: type
+              pretty_name: malware type
+            - key: md5
+              pretty_name: md5
+            - key: domain
+              pretty_name: domain name
+            - key: firstseen
+              pretty_name: first seen
+            - key: lastseen
+              pretty_name: last seen
