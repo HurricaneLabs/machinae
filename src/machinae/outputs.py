@@ -50,9 +50,9 @@ class NormalOutput(MachinaeOutput):
                     continue
 
                 if len(item.resultset) == 0:
-                    self.print("[-] No {0} results".format(site["name"]))
+                    self.print("[-] No {0} Results".format(site["name"]))
                 else:
-                    self.print("[+] {0} results".format(site["name"]))
+                    self.print("[+] {0} Results".format(site["name"]))
                     for result in item.resultset:
                         labels = getattr(result[0], "labels", None)
                         if len(result[0].values()) > 1 or labels is not None:
@@ -78,12 +78,13 @@ class NormalOutput(MachinaeOutput):
 
 class DotEscapedOutput(NormalOutput):
     escapes = {
-        ".": "\u2024",
+        # ".": "\u2024",
         # ".": "<dot>",
         # ".": " DOT ",
+        ".": "[.]",
         "@": " AT ",
-        "http://": "",
-        "https://": "",
+        "http://": "hxxp://",
+        "https://": "hxxps://",
     }
 
     def output_header(self, target, otype, otype_detected):

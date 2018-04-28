@@ -46,6 +46,8 @@ class MachinaeCommand:
                                action="store_const", const="dump_config")
             modes.add_argument("--detect-otype", dest="mode",
                                action="store_const", const="detect_otype")
+            modes.add_argument("--list-sites", dest="mode",
+                               action="store_const", const="list_sites")
             args = ap.parse_args()
         self.args = args
 
@@ -189,6 +191,8 @@ class MachinaeCommand:
             for target_info in self.targets:
                 target_dict.update({target_info.target: target_info.otype})
             output = utils.dump(target_dict)
+        elif self.args.mode == "list_sites":
+            output = utils.listsites(self.conf)
         else:
             output = outputs.MachinaeOutput.get_formatter(fmt).run(self.results)
 
@@ -209,6 +213,7 @@ def main():
         cmd.run()
     except KeyboardInterrupt:
         pass
+
 
 if __name__ == "__main__":
     main()
