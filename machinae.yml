@@ -371,10 +371,10 @@ fortinet_classify:
     - url
   webscraper:
     request:
-      url: 'https://www.fortiguard.com/ip_rep/index.php?data={target}&lookup=Lookup'
+      url: 'https://www.fortiguard.com/webfilter?q={target}'
       method: get
     results:
-    - regex: 'Category:\s(.+)</h3>\s<a'
+    - regex: 'Category:\s(.+)<\/h4>\s'
       values:
         - fortinet_category
       pretty_name: Fortinet URL Category
