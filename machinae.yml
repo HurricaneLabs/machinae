@@ -89,20 +89,17 @@ spamhaus_domain:
         pretty_name: Spamhaus DBL
 ipvoid:
   name: IPVoid
-  default: False
+  default: true
   otypes:
     - ipv4
   webscraper:
-    setup:
-      url: http://www.ipvoid.com/
+    request:
+      url: 'http://www.ipvoid.com/ip-blacklist-check'
       method: post
       data:
         ip: '{target}'
-    request:
-      url: 'http://www.ipvoid.com/scan/{target}'
-      method: get
     results:
-      - regex: '>\s(\w+)</td><td><.{30,50}alert.png'
+      - regex: <td><i class="fa fa-minus-circle text-danger" aria-hidden="true"><\/i>(.+?)<\/td>
         values:
           - ipvoid_blacklist
         pretty_name: Blacklist from IPVoid
