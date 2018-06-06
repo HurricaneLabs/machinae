@@ -99,7 +99,7 @@ ipvoid:
       data:
         ip: '{target}'
     results:
-      - regex: <td><i class="fa fa-minus-circle text-danger" aria-hidden="true"><\/i>(.+?)<\/td>
+      - regex: '<td><i class="fa fa-minus-circle text-danger" aria-hidden="true"><\/i>(.+?)<\/td>'
         values:
           - ipvoid_blacklist
         pretty_name: Blacklist from IPVoid
@@ -120,6 +120,9 @@ urlvoid:
       url: 'http://www.urlvoid.com/scan/{target}'
       method: get
     results:
+      - regex: 'Analysis Date<\/td><td>(.+?)<\/td>'
+        values: urlvoid_analysis_date
+        pretty_name: Last Analysis
       - regex: '(\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}).{5,30}Find\swebsites\shosted\shere'
         values: urlvoid_ip
         pretty_name: IP from URLVoid
