@@ -99,6 +99,10 @@ ipvoid:
       data:
         ip: '{target}'
     results:
+      - regex: '<tr><td>Blacklist Status<\/td><td><.+?>([a-zA-Z\s]+? \d{1,3}\/\d{1,3})<\/span><\/td><\/tr>'
+        values:
+          - ipvoid_status
+        pretty_name: Status from IPVoid    
       - regex: '<td><i class="fa fa-minus-circle text-danger" aria-hidden="true"><\/i>(.+?)<\/td>'
         values:
           - ipvoid_blacklist
