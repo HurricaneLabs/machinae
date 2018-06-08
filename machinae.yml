@@ -511,6 +511,7 @@ vt_hash:
   name: VirusTotal File Report
   otypes:
     - hash
+    - hash.sha1
     - 'hash.sha256'
   json:
     request:
