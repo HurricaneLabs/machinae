@@ -1433,3 +1433,15 @@ xforce-malware:
               pretty_name: first seen
             - key: lastseen
               pretty_name: last seen
+hackedip:
+  name: Hacked IP
+  default: False
+  otypes:
+    - ipv4
+  json:
+    request:
+      url: http://www.hackedip.com/api.php?ip={target}
+    results:
+    - key: '@'
+      format: as_list
+      pretty_name: Hacked IP Threat List
