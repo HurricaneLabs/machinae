@@ -1445,3 +1445,30 @@ hackedip:
     - key: '@'
       format: as_list
       pretty_name: Hacked IP Threat List
+metadefender_hash:
+  name: MetaDefender File Report
+  default: False
+  otypes:
+    - hash
+    - hash.sha1
+    - hash.sha256
+  json:
+    request:
+      url: https://api.metadefender.com/v2/hash/{target}
+      method: get
+      headers:
+        apikey:
+    results:
+      - key: scan_results.start_time
+        pretty_name: Date submitted
+      - key: scan_results.total_detected_avs
+        pretty_name: Detected engines
+      - key: scan_results.total_avs
+        pretty_name: Total engines
+      - key: scan_results.scan_details
+        pretty_name: Scans
+        multi_match:
+          keys:
+            - '@'
+            - threat_found
+          onlyif: scan_result_i
