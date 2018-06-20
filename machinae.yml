@@ -1472,3 +1472,34 @@ metadefender_hash:
             - '@'
             - threat_found
           onlyif: scan_result_i
+greynoise:
+    name: GreyNoise
+    default: False
+    otypes:
+        - ipv4
+    json:
+        request:
+            url: https://enterprise.api.greynoise.io/v2/noise/context/{target}
+            headers:
+                key: 
+        results:
+            - key: seen
+              pretty_name: GreyNoise Known Scanner
+            - key: actor
+              pretty_name: GreyNoise Actor
+            - key: tags
+              pretty_name: GreyNoise Reason
+            - key: metadata.category
+              pretty_name: GreyNoise Category
+            - key: first_seen
+              pretty_name: GreyNoise First Seen
+            - key: last_seen
+              pretty_name: GreyNoise Last Seen
+            - key: raw_data.web.useragents
+              pretty_name: GreyNoise User-agent
+            - key: raw_data.scan
+              multi_match:
+                keys:
+                  - port
+                  - protocol
+              pretty_name: GreyNoise Observations
