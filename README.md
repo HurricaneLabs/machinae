@@ -151,6 +151,7 @@ Machinae comes with out-of-the-box support for the following data sources:
 - IP WHOIS (Using RIR REST interfaces)
 - Hacked IP
 - Metadefender Cloud (Requires API key)
+- GreyNoise (Requires API key)
 
 With additional data sources on the way.
 
@@ -195,6 +196,7 @@ The following sites are disabled by default
 - Shodan (`shodan`)
 - Hacked IP
 - Metadefender Cloud (Requires API key)
+- GreyNoise (Requires API key)
 
 Output Formats
 --------------
