@@ -1472,3 +1472,28 @@ metadefender_hash:
             - '@'
             - threat_found
           onlyif: scan_result_i
+# misp:
+#   name: MISP
+#   default: true
+#   otypes:
+#     - ipv4
+#     - url
+#     - email
+#     - fqdn
+#     - hash
+#     - hash.sha1
+#     - hash.sha256
+#   json:
+#     request:
+#       url: https://***YOUR_MISP_HERE***/events/restSearch/download/{target}/null/null/null/null/7
+#       method: get
+#       headers:
+#         Authorization: ***YOUR_APIKEY_HERE***
+#     results:
+#       - key: response
+#         pretty_name: MISP Events
+#         multi_match:
+#           keys:
+#             - Event.date
+#             - Event.id
+#             - Event.info
