@@ -33,8 +33,10 @@ class NormalOutput(MachinaeOutput):
         self.print("* Information for {0}".format(self.escape(target)))
         self.print("* Observable type: {0} (Auto-detected: {1})".format(otype, otype_detected))
         self.print("*" * 80)
+        #This needs to be refactored so the site from args is available here. No time currently, will do though
+        self.print("Not seeing what you expect? Likely not a valid site. Try running with --list-sites")
 
-    def run(self, result_sets):
+    def run(self, result_sets: object):
         self.init_buffer()
 
         for row in result_sets:
