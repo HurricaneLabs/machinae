@@ -35,6 +35,7 @@ setup(
         'tzlocal',
         'filemagic',
         'feedparser',
+        'defang',
     ],
     entry_points={
         'console_scripts': [
