@@ -11,6 +11,6 @@ PyYAML==3.13
 requests==2.9.1
 tzlocal==1.5.1
 pytz==2018.4
-dnspython3,
+dnspython3>=1.15.0,
 ipwhois<0.11,
-html5lib
+html5lib<=1.0.1
