@@ -1,0 +1,16 @@
+language: python
+
+python:
+  - "2.7"
+  - "3.6"
+
+script:
+  
+deploy:
+  provider: pypi
+  user: billfordx
+  password:
+    secure: 
+  on:
+    tags: true
+    branch: master
