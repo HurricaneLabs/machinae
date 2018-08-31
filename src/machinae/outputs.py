@@ -1,6 +1,6 @@
 import io
 import json
-
+from defang import defang
 
 class MachinaeOutput:
     @staticmethod
@@ -67,12 +67,13 @@ class NormalOutput(MachinaeOutput):
 
                             if result[1] is not None:
                                 output = "({0})".format(", ".join(values))
+                                output = defang(output)
                         else:
                             output = self.escape(list(result[0].values())[0])
-
+                            output = defang(output)
                         if result[1] is not None:
                             output = "{1}: {0}".format(output, result[1])
-
+                            output = defang(output)
                         self.print("    [-] {0}".format(output))
 
         return self._buffer.getvalue()
