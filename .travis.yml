@@ -5,7 +5,7 @@ python:
   - "3.6"
 
 script:
-  
+  - touch test
 deploy:
   provider: pypi
   user: billfordx
