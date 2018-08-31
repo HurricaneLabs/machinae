@@ -231,6 +231,11 @@ Upcoming Features
 Version History
 ---------------
 
+### Version 1.4.1 (2018-08-31) ###
+- New Features
+    - Automatically Defangs output
+    - MISP Support (example added to machinae.yml)
+    
 ### Version 1.4.0 (2016-04-20) ###
 - New features
     - "-a"/"--auth" option for passing an auth config file
