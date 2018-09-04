@@ -3,8 +3,12 @@ language: python
 python:
   - "3.6"
 
+before_install:
+  - pip install pandoc
+
 script:
-  - touch test
+  - pip install -r requirements.txt
+  
 deploy:
   provider: pypi
   user: billfordx
