@@ -121,6 +121,7 @@ class JsonGenerator(MachinaeOutput):
                 output = dict()
                 output["site"] = item.site_info["name"]
                 output["results"] = dict()
+                output["observable"] = target
 
                 if hasattr(item, "error_info"):
                     output["results"] = {"error_info": str(item.error_info)}
