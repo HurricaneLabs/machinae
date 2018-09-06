@@ -98,6 +98,7 @@ class JsonApi(HttpSite):
                 m = rex.search(val)
                 if not m:
                     return
+                #pylint: disable=len-as-condition
                 if len(m.groups()) > 0:
                     val = m.groups()
                     if len(val) == 1:
@@ -117,6 +118,8 @@ class JsonApi(HttpSite):
                 elif parser["format"] == "as_time":
                     try:
                         dt = datetime.datetime.fromtimestamp(val)
+                    #pylint: disable=bare-except
+                    #Will be cleaned up in future refactor -- I hate mcmaster
                     except:
                         dt = parse(val)
                     val = dt.isoformat()
@@ -170,7 +173,7 @@ class JsonApi(HttpSite):
                 for mm_result_dict in cls.get_result_dicts(v, mm_parser, mm_key=k, onlyif=onlyif):
                     result_dict.update(mm_result_dict)
 
-            if len(result_dict) > 0:
+            if result_dict:
                 result_dict.labels = parser.get("labels", None)
                 yield result_dict
 

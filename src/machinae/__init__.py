@@ -9,7 +9,7 @@ ResultSet = collections.namedtuple("ResultSet", ("target_info", "results"))
 SiteResults = collections.namedtuple("SiteResults", ("site_info", "resultset"))
 Result = collections.namedtuple("Result", ("value", "pretty_name"))
 
-
+#pylint: disable=too-many-return-statements, bare-except
 def get_target_type(target):
     # IPv4
     try:
@@ -26,7 +26,7 @@ def get_target_type(target):
         pass
     else:
         return "ipv6"
-
+    #pylint: disable=no-else-return
     # Hashes
     if re.match("^[a-f0-9]{32}$", target, re.I):
         # MD5

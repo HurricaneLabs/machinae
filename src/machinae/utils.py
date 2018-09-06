@@ -1,7 +1,8 @@
-import yaml
 from collections import OrderedDict
+import yaml
 
 class MachinaeLoader(yaml.SafeLoader):
+    #pylint: disable=arguments-differ
     def construct_mapping(self, node):
         self.flatten_mapping(node)
         return OrderedDict(self.construct_pairs(node))
@@ -28,7 +29,8 @@ MachinaeDumper.add_representer(
     list,
     MachinaeDumper.represent_list)
 
-
+#This is to load site results as an OrderedDict so we override the
+#built-in PyYAML safe_load
 def safe_load(*args, **kwargs):
     kwargs["Loader"] = MachinaeLoader
     return yaml.load(*args, **kwargs)

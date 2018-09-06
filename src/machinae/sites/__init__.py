@@ -2,7 +2,7 @@ from __future__ import absolute_import
 
 import urllib.parse
 
-
+#pylint: disable=useless-object-inheritance
 class Site(object):
     _session = None
     _kwargs = None
@@ -75,7 +75,7 @@ class Site(object):
 
     def get_content(self):
         raise NotImplementedError
-
+    #pylint: disable=no-member
     def __iter__(self):
         for _ in self.run():
             yield _

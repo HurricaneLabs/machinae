@@ -55,6 +55,7 @@ class CsvSite(HttpSite):
                 stop = parser.get("end", None)
 
                 # raise ValueError(start, stop)
+                #pylint: disable=len-as-condition
                 if lineno < start or len(row) == 0 or row[0].startswith("#"):
                     continue
                 elif stop is not None and lineno > stop:

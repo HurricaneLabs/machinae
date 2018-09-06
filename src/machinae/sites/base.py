@@ -12,6 +12,7 @@ import relatime
 import requests
 from tzlocal import get_localzone
 try:
+    #pylint: disable=ungrouped-imports
     from requests.packages.urllib3 import exceptions
 except ImportError:
     # Apparently, some linux distros strip the packages out of requests
@@ -68,7 +69,7 @@ class HttpSite(Site):
 
         kwargs = dict()
         headers = conf.get("headers", {})
-        if len(headers) > 0:
+        if headers:
             kwargs["headers"] = headers
         verify_ssl = conf.get("verify_ssl", True)
 
@@ -89,14 +90,14 @@ class HttpSite(Site):
                         params[k] = dt.strftime(time_format)
             else:
                 params[k] = str(v).format(**self.kwargs)
-        if len(params) > 0:
+        if params:
             kwargs["params"] = params
 
         # POST data
         data = conf.get("data", {})
         for (k, v) in data.items():
             data[k] = v.format(**self.kwargs)
-        if len(data) > 0:
+        if data:
             kwargs["data"] = data
 
         # HTTP Basic Auth
@@ -125,7 +126,8 @@ class HttpSite(Site):
         if r.status_code not in ignored_status_codes:
             r.raise_for_status()
         return r
-
+    #pylint: disable=no-self-use
+    #Will be cleaned up in upcoming refactor
     def build_result(self, parser, result_dict):
         defaults_dict = parser.get("defaults", {})
 

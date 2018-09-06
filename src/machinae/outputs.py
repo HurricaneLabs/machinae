@@ -4,6 +4,8 @@ from defang import defang
 
 class MachinaeOutput:
     @staticmethod
+    #pylint: disable=no-else-return, redefined-builtin, inconsistent-return-statements
+    #Will be cleaned up in upcoming refactor
     def get_formatter(format):
         if format.upper() == "N":
             return NormalOutput()
@@ -18,6 +20,8 @@ class MachinaeOutput:
     def escape(text):
         return str(text)
 
+    #pylint: disable=attribute-defined-outside-init
+    #Will be cleaned up in upcoming refactor
     def init_buffer(self):
         self._buffer = io.StringIO()
 
@@ -38,7 +42,7 @@ class NormalOutput(MachinaeOutput):
 
     def run(self, result_sets: object):
         self.init_buffer()
-
+        #pylint: disable=too-many-nested-blocks
         for row in result_sets:
             (target, otype, otype_detected) = row.target_info
 
@@ -51,7 +55,7 @@ class NormalOutput(MachinaeOutput):
                     self.print("[!] Error from {0}: {1}".format(site["name"], item.error_info))
                     continue
 
-                if len(item.resultset) == 0:
+                if not item.resultset:
                     self.print("[-] No {0} Results".format(site["name"]))
                 else:
                     self.print("[+] {0} Results".format(site["name"]))
@@ -105,7 +109,8 @@ class DotEscapedOutput(NormalOutput):
             text = text.replace(find, replace)
         return text
 
-
+#pylint: disable=no-self-use, unused-variable
+#Will be cleaned up in upcoming refactor
 class JsonGenerator(MachinaeOutput):
     def run(self, result_sets):
         records = list()
@@ -119,7 +124,7 @@ class JsonGenerator(MachinaeOutput):
 
                 if hasattr(item, "error_info"):
                     output["results"] = {"error_info": str(item.error_info)}
-                elif len(item.resultset) > 0:
+                elif item.resultset:
                     for result in item.resultset:
                         if result.pretty_name not in output["results"]:
                             output["results"][result.pretty_name] = list()
@@ -157,7 +162,7 @@ class ShortOutput(MachinaeOutput):
                 site = item.site_info
                 if hasattr(item, "error_info"):
                     self.print("    {0}: Error".format(site["name"]))
-                elif len(item.resultset) == 0:
+                elif not item.resultset:
                     self.print("    {0}: No".format(site["name"]))
                 else:
                     self.print("    {0}: Yes".format(site["name"]))

@@ -88,6 +88,7 @@ class MachinaeCommand:
         return self._conf
 
     @property
+    #pylint: disable=too-many-locals, too-many-branches
     def results(self):
         creds = None
         if self.args.auth and os.path.isfile(self.args.auth):
@@ -117,6 +118,7 @@ class MachinaeCommand:
             (target, otype, _) = target_info
 
             target_results = list()
+            #pylint: disable=unused-variable
             for (site_name, site_conf) in self.sites.items():
                 if otype.lower() not in map(lambda x: x.lower(), site_conf["otypes"]):
                     continue
@@ -134,6 +136,8 @@ class MachinaeCommand:
                             run_results.append(Result(r["value"], r["pretty_name"]))
                 except stopit.TimeoutException:
                     target_results.append(ErrorResult(target_info, site_conf, "Timeout"))
+                #pylint: disable=broad-except
+                #Will be cleaned up in upcoming refactor
                 except Exception as e:
                     target_results.append(ErrorResult(target_info, site_conf, e))
                 else:
@@ -177,7 +181,7 @@ class MachinaeCommand:
         fmt = self.args.output.upper()
         dest = self.args.file
 
-        if len(self.conf) == 0:
+        if not self.conf:
             sys.stderr.write("Warning: operating without a config file. This is probably not what "
                              "you want. To correct this, fetch a copy of the default "
                              "configuration file from https://github.com/hurricanelabs/machinae "

@@ -40,6 +40,8 @@ class TableScraper(HtmlSite):
     def compare_rows(row1, row2):
         row1 = [cell.strip().lower() for cell in row1]
         row2 = [cell.strip().lower() for cell in row2]
+        #pylint: disable=superfluous-parens
+        #I believe these to actually be unnecessary,er,superfluous but will have to test
         return (Counter(row1) == Counter(row2))
 
     @staticmethod

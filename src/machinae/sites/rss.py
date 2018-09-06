@@ -15,8 +15,8 @@ class RssSite(HttpSite):
     def run(self):
         r = self._req(self.conf["request"])
         body = r.text
-
         rss = feedparser.parse(body)
+        parser = None
 
         for entry in rss.entries:
             for parser1 in self.conf["results"]:
