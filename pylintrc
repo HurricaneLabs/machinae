@@ -148,7 +148,10 @@ disable=print-statement,
 	arguments-differ,
 	protected-access,
 	too-many-locals,
-	too-many-branches
+	too-many-branches,
+	not-context-manager,
+	unexpected-keyword-arg,
+	no-member
 
 
 # Enable the message, report, category or checker with the given id(s). You can
