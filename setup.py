@@ -22,7 +22,7 @@ setup(
     zip_safe=False,
     url='http://hurricanelabs.github.io/machinae/',
     description='Machinae Security Intelligence Collector',
-    long_description=get_long_description(),
+    long_description='Machinae is a tool for collecting intelligence from public sites/feeds about various security-related pieces of data: IP addresses, domain names, URLs, email addresses, file hashes and SSL fingerprints.',
     install_requires=[
         'dnspython3',
         'ipwhois<0.11',
