@@ -5,10 +5,12 @@ python:
 
 before_install:
   - pip install pandoc
-
+  - pip install pylint
 script:
   - pip install -r requirements.txt
-  
+  - pylint src/machinae/*.py
+  - pylint src/machinae/sites/*.py
+
 deploy:
   provider: pypi
   user: billfordx
