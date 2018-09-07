@@ -1,6 +1,7 @@
 import collections
 import re
 import socket
+import ipaddress
 
 
 TargetInfo = collections.namedtuple("TargetInfo", ("target", "otype", "otype_detected"))
@@ -9,23 +10,16 @@ ResultSet = collections.namedtuple("ResultSet", ("target_info", "results"))
 SiteResults = collections.namedtuple("SiteResults", ("site_info", "resultset"))
 Result = collections.namedtuple("Result", ("value", "pretty_name"))
 
-#pylint: disable=too-many-return-statements, bare-except
 def get_target_type(target):
-    # IPv4
     try:
-        socket.inet_aton(target)
-    except:
+        getVer=ipaddress.ip_address(target)
+        if getVer.version == 4:
+            return "ipv4"
+        elif getVer.version == 6:
+            return "ipv6"
+    except ValueError:
         pass
-    else:
-        return "ipv4"
 
-    # IPv6
-    try:
-        socket.inet_pton(socket.AF_INET6, target)
-    except:
-        pass
-    else:
-        return "ipv6"
     #pylint: disable=no-else-return
     # Hashes
     if re.match("^[a-f0-9]{32}$", target, re.I):
