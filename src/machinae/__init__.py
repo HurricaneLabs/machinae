@@ -10,9 +10,10 @@ ResultSet = collections.namedtuple("ResultSet", ("target_info", "results"))
 SiteResults = collections.namedtuple("SiteResults", ("site_info", "resultset"))
 Result = collections.namedtuple("Result", ("value", "pretty_name"))
 
+#pylint: disable=no-else-return,too-many-return-statements
 def get_target_type(target):
     try:
-        getVer=ipaddress.ip_address(target)
+        getVer = ipaddress.ip_address(target)
         if getVer.version == 4:
             return "ipv4"
         elif getVer.version == 6:
