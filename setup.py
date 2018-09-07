@@ -1,15 +1,14 @@
 import subprocess
 from setuptools import setup, find_packages
+from os import path
+
+#this should hopefully allow us to have a more pypi friendly, always up to date readme
+readMeDir = path.abspath(path.dirname(__file__))
+with open(path.join(readMeDir, 'README.md'), encoding='utf-8') as readFile:
+    long_desc = readFile.read()
 
 
-def get_long_description():
-    cmd = 'pandoc -f markdown_github -t rst README.md --no-wrap'
-    try:
-        return subprocess.check_output(cmd, shell=True, universal_newlines=True)
-    except:
-        return ""
-
-VERSION = '1.4.4'
+VERSION = '1.4.5'
 
 setup(
     name='machinae',
@@ -22,7 +21,8 @@ setup(
     zip_safe=False,
     url='http://hurricanelabs.github.io/machinae/',
     description='Machinae Security Intelligence Collector',
-    long_description='Machinae is a tool for collecting intelligence from public sites/feeds about various security-related pieces of data: IP addresses, domain names, URLs, email addresses, file hashes and SSL fingerprints.',
+    long_description=long_desc,
+    long_description_content_type='text/markdown',
     install_requires=[
         'dnspython3',
         'ipwhois<0.11',
