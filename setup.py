@@ -9,7 +9,7 @@ def get_long_description():
     except:
         return ""
 
-VERSION = '1.4.3'
+VERSION = '1.4.4'
 
 setup(
     name='machinae',
