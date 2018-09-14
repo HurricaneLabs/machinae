@@ -2,7 +2,7 @@ from collections import OrderedDict
 import yaml
 
 class MachinaeLoader(yaml.SafeLoader):
-    #pylint: disable=arguments-differ
+    #pylint: disable=arguments-differ,too-many-ancestors
     def construct_mapping(self, node):
         self.flatten_mapping(node)
         return OrderedDict(self.construct_pairs(node))
@@ -13,6 +13,7 @@ MachinaeLoader.add_constructor(
     MachinaeLoader.construct_mapping)
 
 
+#pylint: disable=too-many-ancestors
 class MachinaeDumper(yaml.Dumper):
     def represent_dict(self, data):
         return self.represent_mapping('tag:yaml.org,2002:map', data, False)

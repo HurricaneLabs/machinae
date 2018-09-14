@@ -3,8 +3,8 @@ import copy
 import os
 import sys
 from collections import OrderedDict
-
 import stopit
+from machinae import __version__
 
 from . import dict_merge, get_target_type, outputs, utils
 from . import ErrorResult, Result, ResultSet, SiteResults, TargetInfo
@@ -40,6 +40,7 @@ class MachinaeCommand:
             ap.add_argument("-a", "--auth")
             ap.add_argument("-H", "--http-proxy", dest="http_proxy")
             ap.add_argument("targets", nargs=argparse.REMAINDER)
+            ap.add_argument("-v", "--version", action="version", version="%(prog)s "+ __version__)
 
             modes = ap.add_mutually_exclusive_group()
             modes.add_argument("--dump-config", dest="mode",
