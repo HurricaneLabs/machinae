@@ -1,0 +1,8 @@
+title: Machinae
+description: Machinae Security Intelligence Collector
+google_analytics: 
+show_downloads: true
+theme: jekyll-theme-cayman
+
+gems:
+  - jekyll-mentions
