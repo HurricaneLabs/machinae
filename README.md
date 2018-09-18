@@ -1,5 +1,8 @@
 [![Build Status](https://travis-ci.org/HurricaneLabs/machinae.svg?branch=master)](https://travis-ci.org/HurricaneLabs/machinae)
 
+![Machinae Logo](images/machinae.jpg)
+
+
 Machinae Security Intelligence Collector
 ========================================
 
