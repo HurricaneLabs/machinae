@@ -157,6 +157,7 @@ Machinae comes with out-of-the-box support for the following data sources:
 - Hacked IP
 - Metadefender Cloud (Requires API key)
 - GreyNoise (Requires API key)
+- IBM XForce (Required API key)
 
 With additional data sources on the way.
 
@@ -202,6 +203,7 @@ The following sites are disabled by default
 - Hacked IP
 - Metadefender Cloud (Requires API key)
 - GreyNoise (Requires API key)
+- IBM XForce (Requires API key)
 
 Output Formats
 --------------
