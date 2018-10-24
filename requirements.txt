@@ -1,4 +1,4 @@
-defang==0.4.0
+defang
 tzlocal==1.5.1
 relatime==1.1.0
 urllib3==1.13.1
@@ -8,9 +8,9 @@ beautifulsoup4==4.6.3
 python_dateutil==2.7.3
 python_magic==0.4.15
 PyYAML==3.13
-requests==2.9.1
+requests
 tzlocal==1.5.1
-pytz==2018.4
+pytz
 dnspython3>=1.15.0
 ipwhois<0.11
 html5lib<=1.0.1
