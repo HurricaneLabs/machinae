@@ -1,6 +1,6 @@
 from os import path
 from setuptools import setup, find_packages
-import machinae
+
 
 #this should hopefully allow us to have a more pypi friendly, always up to date readme
 readMeDir = path.abspath(path.dirname(__file__))
@@ -8,7 +8,7 @@ with open(path.join(readMeDir, 'README.md'), encoding='utf-8') as readFile:
     long_desc = readFile.read()
 
 
-VERSION = machinae.__version__
+VERSION = 1.4.5
 
 setup(
     name='machinae',
