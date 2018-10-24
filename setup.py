@@ -25,7 +25,7 @@ setup(
     long_description_content_type='text/markdown',
     install_requires=[
         'dnspython3',
-        'ipwhois<0.11',
+        'ipwhois',
         'requests',
         'stopit',
         'pyyaml',
