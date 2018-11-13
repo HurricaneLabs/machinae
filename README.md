@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/HurricaneLabs/machinae.svg?branch=master)](https://travis-ci.org/HurricaneLabs/machinae)
+[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/2344/badge)](https://bestpractices.coreinfrastructure.org/projects/2344)
 
 ![Machinae Logo](images/machinae.jpg)
 
