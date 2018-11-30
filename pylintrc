@@ -151,7 +151,8 @@ disable=print-statement,
 	too-many-branches,
 	not-context-manager,
 	unexpected-keyword-arg,
-	no-member
+	no-member,
+	cyclic-import
 
 
 # Enable the message, report, category or checker with the given id(s). You can
