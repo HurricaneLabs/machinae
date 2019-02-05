@@ -8,9 +8,9 @@ from collections import OrderedDict
 
 from dateutil.parser import parse
 
-from .base import HttpSite
-
 from relatime import timeParser
+
+from .base import HttpSite
 
 class JsonApi(HttpSite):
     @staticmethod
@@ -168,13 +168,13 @@ class JsonApi(HttpSite):
                         continue
                 # Check for maxage key in onlyif. If it exists, parse it as Splunk relative time syntax and compare to parsed input "value"
                 elif "maxage" in onlyif:
-                    age=parse(value)
+                    age = parse(value)
                     if not onlyif["maxage"].startswith("-"):  # Assume we want dates in the past
                         print('\033[91m' + 'WARNING: maxage must be prepended with "-" Please correct this in your configuration file.' + '\033[0m')
                         onlyif["maxage"] = "-%s" % onlyif["maxage"]
-                    ageout=timeParser(onlyif["maxage"]).replace(tzinfo=None)
+                    ageout = timeParser(onlyif["maxage"]).replace(tzinfo=None)
                     if age < ageout:
-                        continue                        
+                        continue
                 else:
                     if not bool(value):
                         continue
