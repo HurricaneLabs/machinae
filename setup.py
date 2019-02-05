@@ -8,7 +8,7 @@ with open(path.join(readMeDir, 'README.md'), encoding='utf-8') as readFile:
     long_desc = readFile.read()
 
 
-VERSION = '1.4.5'
+VERSION = '1.4.6'
 
 setup(
     name='machinae',
