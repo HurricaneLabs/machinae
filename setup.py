@@ -49,4 +49,3 @@ setup(
     ],
     bugtrack_url='https://github.com/HurricaneLabs/machinae/issues',
 )
-
