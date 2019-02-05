@@ -1147,6 +1147,9 @@ threatcrowd_ip_report:
         labels:
           - Domain
           - Last Resolved
+        onlyif:
+          key: last_resolved
+          maxage: '-30d'
     - key: 'hashes'
       pretty_name: Known Malware Hash
       match_all: true
