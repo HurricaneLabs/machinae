@@ -3,7 +3,7 @@ import re
 import socket
 import ipaddress
 
-__version__ = "1.4.5"
+__version__ = "1.4.6"
 TargetInfo = collections.namedtuple("TargetInfo", ("target", "otype", "otype_detected"))
 ErrorResult = collections.namedtuple("ErrorResult", ("target_info", "site_info", "error_info"))
 ResultSet = collections.namedtuple("ResultSet", ("target_info", "results"))
