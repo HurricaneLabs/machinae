@@ -411,6 +411,9 @@ vt_ip:
             regex: '(\d{4}\-\d{1,2}\-\d{1,2})'
           - key: url
             regex: '(http.{1,70}/)'
+        onlyif:
+          key: scan_date
+          maxage: '-30d'
       pretty_name: pDNS malicious URLs from VirusTotal
 # vt_ip:
 #   name: VirusTotal pDNS
