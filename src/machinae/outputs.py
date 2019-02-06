@@ -122,6 +122,8 @@ class JsonGenerator(MachinaeOutput):
                 output["site"] = item.site_info["name"]
                 output["results"] = dict()
                 output["observable"] = target
+                output["observable type"] = otype
+                output["observable type detected"] = otype_detected
 
                 if hasattr(item, "error_info"):
                     output["results"] = {"error_info": str(item.error_info)}
