@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/HurricaneLabs/machinae.svg?branch=master)](https://travis-ci.org/HurricaneLabs/machinae)
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/2344/badge)](https://bestpractices.coreinfrastructure.org/projects/2344)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=HurricaneLabs_machinae&metric=alert_status)](https://sonarcloud.io/dashboard?id=HurricaneLabs_machinae)
 
 ![Machinae Logo](images/machinae.jpg)
 
