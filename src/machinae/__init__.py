@@ -48,6 +48,10 @@ def get_target_type(target):
     elif re.match("^(?:[a-f0-9]{2}:){19}[a-f0-9]{2}$", target, flags=re.I):
         return "sslfp"
 
+    # Mac Addresses
+    elif re.match("^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$", target, re.I):
+        return "mac"
+
     return "fqdn"
 
 
