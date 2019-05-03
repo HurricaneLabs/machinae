@@ -152,7 +152,8 @@ disable=print-statement,
 	not-context-manager,
 	unexpected-keyword-arg,
 	no-member,
-	cyclic-import
+	cyclic-import,
+	anomalous-backslash-in-string
 
 
 # Enable the message, report, category or checker with the given id(s). You can
