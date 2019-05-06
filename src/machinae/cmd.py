@@ -33,7 +33,7 @@ class MachinaeCommand:
             ap.add_argument("-i", "--infile", default=None)
             ap.add_argument("-o", dest="output", default="N", choices=("D", "J", "N", "S"))
             ap.add_argument("-O", "--otype",
-                            choices=("ipv4", "ipv6", "fqdn", "email", "sslfp", "hash", "url")
+                            choices=("ipv4", "ipv6", "fqdn", "email", "sslfp", "hash", "url", "mac")
                             )
             ap.add_argument("-q", "--quiet", dest="verbose", default=True, action="store_false")
             ap.add_argument("-s", "--sites", default="default")
