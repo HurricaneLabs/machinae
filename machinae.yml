@@ -1537,3 +1537,17 @@ greynoise:
                   - port
                   - protocol
               pretty_name: GreyNoise Observations
+macvendors:
+  name: MACVendors
+  default: true
+  otypes:
+    - mac
+  webscraper:
+    request:
+      url: 'https://api.macvendors.com/{target}'
+      method: get
+    results:
+      - regex: '(.+)'
+        values:
+          - vendor
+        pretty_name: Mac Address Vendor
