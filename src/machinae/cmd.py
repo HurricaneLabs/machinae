@@ -147,7 +147,7 @@ class MachinaeCommand:
             if self.recursive_sites:
                 for (related_target, related_otype) in get_related_targets(target, otype):
                     for (site_name, site_conf) in self.recursive_sites.items():
-                        result = run_site(site_name, site_conf, target, otype)
+                        result = run_site(site_name, site_conf, related_target, related_otype)
                         if result:
                             target_results.append(result)
 
