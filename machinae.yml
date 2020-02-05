@@ -89,32 +89,29 @@ spamhaus_domain:
         pretty_name: Spamhaus DBL
 ipvoid:
   name: IPVoid
-  default: true
+  default: False
   otypes:
     - ipv4
-  webscraper:
+  json:
     request:
-      url: 'http://www.ipvoid.com/ip-blacklist-check'
-      method: post
-      data:
+      url: 'https://endpoint.apivoid.com/iprep/v1/pay-as-you-go/'
+      params:
+        key: 
         ip: '{target}'
+      method: get
     results:
-      - regex: '<tr><td>Blacklist Status<\/td><td><.+?>([a-zA-Z\s]+? \d{1,3}\/\d{1,3})<\/span><\/td><\/tr>'
-        values:
-          - ipvoid_status
-        pretty_name: Status from IPVoid    
-      - regex: '<td><i class="fa fa-minus-circle text-danger" aria-hidden="true"><\/i>(.+?)<\/td>'
-        values:
-          - ipvoid_blacklist
-        pretty_name: Blacklist from IPVoid
-      - regex: 'ISP</td><td>(.+)</td>'
-        values:
-          - ipvoid_isp
-        pretty_name: ISP from IPVoid
-      - regex: 'Country\sCode.+flag"\s/>\s\((\w+)\)[\w\s]+</td>'
-        values:
-          - ipvoid_country_code
-        pretty_name: Country from IPVoid
+    - key: data.report.blacklists.detections
+      pretty_name: Number of detections
+    - key: data.report.blacklists.detection_rate
+      pretty_name: IP Void Detection Rate
+    - key: data.report.blacklists.engines
+      pretty_name: Engines
+      multi_match:
+        keys:
+          - engine
+          - reference
+        onlyif: detected
+        
 urlvoid:
   name: URLVoid
   otypes:
