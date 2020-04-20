@@ -269,10 +269,11 @@ telize:
     - ipv4
   json:
     request:
-      url: 'https://telize-v1.p.mashape.com/geoip/{target}'
+      url: 'https://telize-v1.p.rapidapi.com/location/{{target}'
       method: get
       headers:
-        X-Mashape-Key:
+        x-rapidapi-host: telize-v1.p.rapidapi.com
+        x-rapidapi-key:
         Accept: application/json
     results:
     - key: continent_code
