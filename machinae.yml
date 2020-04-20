@@ -269,7 +269,7 @@ telize:
     - ipv4
   json:
     request:
-      url: 'https://telize-v1.p.rapidapi.com/location/{{target}'
+      url: 'https://telize-v1.p.rapidapi.com/location/{target}'
       method: get
       headers:
         x-rapidapi-host: telize-v1.p.rapidapi.com
