@@ -31,7 +31,7 @@ jobs:
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v1
       # Override language selection by uncommenting this and choosing your languages
-       with:
+      with:
          languages: python
 
     # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
