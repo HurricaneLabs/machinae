@@ -155,7 +155,8 @@ disable=print-statement,
 	cyclic-import,
 	anomalous-backslash-in-string,
 	import-outside-toplevel,
-	no-else-continue
+	no-else-continue,
+	super-with-arguments
 
 
 # Enable the message, report, category or checker with the given id(s). You can
