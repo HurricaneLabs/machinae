@@ -118,7 +118,7 @@ class JsonApi(HttpSite):
                     val = ", ".join(map(str, val))
                 elif parser["format"] == "as_time":
                     try:
-                        dt = datetime.datetime.fromtimestamp(val)
+                        dt = datetime.datetime.fromtimestamp(float(val))
                     #pylint: disable=bare-except
                     #Will be cleaned up in future refactor -- I hate mcmaster
                     except:
