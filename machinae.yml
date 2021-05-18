@@ -96,7 +96,7 @@ ipvoid:
     request:
       url: 'https://endpoint.apivoid.com/iprep/v1/pay-as-you-go/'
       params:
-        key: 
+        key:
         ip: '{target}'
       method: get
     results:
@@ -111,7 +111,7 @@ ipvoid:
           - engine
           - reference
         onlyif: detected
-        
+
 urlvoid:
   name: URLVoid
   otypes:
@@ -1384,36 +1384,61 @@ metadefender_hash:
 #             - Event.id
 #             - Event.info
 greynoise:
-    name: GreyNoise
-    default: False
-    otypes:
-        - ipv4
-    json:
-        request:
-            url: https://enterprise.api.greynoise.io/v2/noise/context/{target}
-            headers:
-                key: 
-        results:
-            - key: seen
-              pretty_name: GreyNoise Known Scanner
-            - key: actor
-              pretty_name: GreyNoise Actor
-            - key: tags
-              pretty_name: GreyNoise Reason
-            - key: metadata.category
-              pretty_name: GreyNoise Category
-            - key: first_seen
-              pretty_name: GreyNoise First Seen
-            - key: last_seen
-              pretty_name: GreyNoise Last Seen
-            - key: raw_data.web.useragents
-              pretty_name: GreyNoise User-agent
-            - key: raw_data.scan
-              multi_match:
-                keys:
-                  - port
-                  - protocol
-              pretty_name: GreyNoise Observations
+  # This entry is for the GreyNoise *community* API
+  name: GreyNoise
+  otypes:
+    - ipv4
+  json:
+    request:
+      url: https://api.greynoise.io/v3/community/{target}
+      # headers:
+      #   key: ***YOUR_APIKEY_HERE***
+      #        you can get this from https://viz.greynoise.io/account/
+      ignored_status_codes:
+        - 404
+    results:
+      - key: noise
+        pretty_name: GreyNoise Known Scanner
+      - key: riot
+        pretty_name: GreyNoise Rule-It-OuT
+      - key: classification
+        pretty_name: GreyNoise Classification
+      - key: name
+        pretty_name: GreyNoise Name
+greynoise_ent:
+  # This entry is for the GreyNoise *enterprise* API
+  name: GreyNoise
+  default: False
+  otypes:
+    - ipv4
+  json:
+    request:
+      url: https://enterprise.api.greynoise.io/v2/noise/context/{target}
+      headers:
+        key: ***YOUR_APIKEY_HERE***
+      ignored_status_codes:
+        - 404
+    results:
+      - key: seen
+        pretty_name: GreyNoise Known Scanner
+      - key: actor
+        pretty_name: GreyNoise Actor
+      - key: tags
+        pretty_name: GreyNoise Reason
+      - key: metadata.category
+        pretty_name: GreyNoise Category
+      - key: first_seen
+        pretty_name: GreyNoise First Seen
+      - key: last_seen
+        pretty_name: GreyNoise Last Seen
+      - key: raw_data.web.useragents
+        pretty_name: GreyNoise User-agent
+      - key: raw_data.scan
+        multi_match:
+        keys:
+          - port
+          - protocol
+        pretty_name: GreyNoise Observations
 macvendors:
   name: MACVendors
   default: true
