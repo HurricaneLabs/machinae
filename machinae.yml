@@ -1415,7 +1415,7 @@ greynoise_ent:
     request:
       url: https://enterprise.api.greynoise.io/v2/noise/context/{target}
       headers:
-        key: ***YOUR_APIKEY_HERE***
+        key: YOUR_APIKEY_HERE
       ignored_status_codes:
         - 404
     results:
