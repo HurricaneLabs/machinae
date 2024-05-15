@@ -41,8 +41,7 @@ class HttpSite(Site):
     def unzip_content(r, *args, **kwargs):
         content = r.content
 
-        with magic.Magic(flags=magic.MAGIC_MIME_TYPE) as m:
-            mime = m.id_buffer(content)
+        mime = magic.from_buffer(content, mime=True)
 
         if mime == "application/zip":
             zip_buffer = io.BytesIO(content)
