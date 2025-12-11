@@ -2,7 +2,9 @@ import argparse
 import copy
 import os
 import sys
+import time
 from collections import OrderedDict
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import stopit
 from machinae import __version__
 
@@ -10,6 +12,60 @@ from . import dict_merge, get_target_type, outputs, utils
 from . import ErrorResult, Result, ResultSet, SiteResults, TargetInfo
 from .sites import Site
 
+
+
+def _run_single_site_for_target(
+    site_name,
+    site_conf,
+    target_info,
+    creds,
+    proxies,
+    verbose,
+    timeout_seconds=15,
+    delay_seconds=0,
+):
+    """
+    Run one site for one target and return either:
+      * SiteResults(site_info, [Result(...), ...]), or
+      * ErrorResult(target_info, site_info, error)
+
+    Returns None if the site does not support this otype.
+    """
+    target, otype, _ = target_info
+
+    # Respect otype filtering just like the original logic
+    if otype.lower() not in map(lambda x: x.lower(), site_conf.get("otypes", [])):
+        return None
+
+    # Work on a copy so threads don't stomp each other's config
+    site_conf = copy.deepcopy(site_conf)
+    site_conf["target"] = target
+    site_conf["verbose"] = verbose
+    # Keep track of the site name so we can restore ordering later if needed
+    site_conf["name"] = site_name
+
+    scraper = Site.from_conf(site_conf, creds=creds, proxies=proxies)
+
+    # Respect delay between requests if configured
+    if delay_seconds:
+        time.sleep(delay_seconds)
+
+    try:
+        run_results = []
+        # Use stopit.ThreadingTimeout here: works in worker threads and avoids
+        # the "signal only works in main thread" problem from SignalTimeout.
+        with stopit.ThreadingTimeout(timeout_seconds, swallow_exc=False):
+            for r in scraper.run():
+                if "value" not in r:
+                    r = {"value": r, "pretty_name": None}
+                run_results.append(Result(r["value"], r["pretty_name"]))
+    except stopit.TimeoutException:
+        return ErrorResult(target_info, site_conf, "Timeout")
+    except Exception as e:  # pylint: disable=broad-except
+        # This mirrors the original broad exception handling
+        return ErrorResult(target_info, site_conf, e)
+    else:
+        return SiteResults(site_conf, run_results)
 
 default_config_locations = (
     "machinae.yml",
@@ -37,6 +93,8 @@ class MachinaeCommand:
                             )
             ap.add_argument("-q", "--quiet", dest="verbose", default=True, action="store_false")
             ap.add_argument("-s", "--sites", default="default")
+            ap.add_argument("-w", "--workers", type=int, default=10,
+                            help="Maximum concurrent site lookups per target")
             ap.add_argument("-a", "--auth")
             ap.add_argument("-H", "--http-proxy", dest="http_proxy")
             ap.add_argument("targets", nargs=argparse.REMAINDER)
@@ -91,6 +149,13 @@ class MachinaeCommand:
     @property
     #pylint: disable=too-many-locals, too-many-branches
     def results(self):
+        """
+        Yield ResultSet objects for each target, but run the per-site lookups
+        concurrently to speed things up.
+
+        External behavior (what the rest of Machinae sees) is unchanged:
+        this is still a generator of ResultSet instances.
+        """
         creds = None
         if self.args.auth and os.path.isfile(self.args.auth):
             with open(self.args.auth) as auth_f:
@@ -115,35 +180,62 @@ class MachinaeCommand:
         if "https" in proxies:
             print("HTTPS Proxy: {https}".format(**proxies), file=sys.stderr)
 
+        # Iterate over targets as before, but fan out per-site work with a pool
         for target_info in self.targets:
-            (target, otype, _) = target_info
+            target, otype, _ = target_info
+            target_results = []
 
-            target_results = list()
-            #pylint: disable=unused-variable
-            for (site_name, site_conf) in self.sites.items():
-                if otype.lower() not in map(lambda x: x.lower(), site_conf["otypes"]):
-                    continue
+            # Figure out which sites apply to this otype, preserving config order
+            all_sites = list(self.sites.items())
+            sites_for_target = [
+                (site_name, site_conf)
+                for (site_name, site_conf) in all_sites
+                if otype.lower()
+                in map(lambda x: x.lower(), site_conf.get("otypes", []))
+            ]
 
-                site_conf["target"] = target
-                site_conf["verbose"] = self.args.verbose
-                scraper = Site.from_conf(site_conf, creds=creds, proxies=proxies)  # , verbose=self.verbose)
+            if not sites_for_target:
+                # Nothing to do for this target
+                yield ResultSet(target_info, target_results)
+                continue
 
-                try:
-                    with stopit.SignalTimeout(15, swallow_exc=False):
-                        run_results = list()
-                        for r in scraper.run():
-                            if "value" not in r:
-                                r = {"value": r, "pretty_name": None}
-                            run_results.append(Result(r["value"], r["pretty_name"]))
-                except stopit.TimeoutException:
-                    target_results.append(ErrorResult(target_info, site_conf, "Timeout"))
-                #pylint: disable=broad-except
-                #Will be cleaned up in upcoming refactor
-                except Exception as e:
-                    target_results.append(ErrorResult(target_info, site_conf, e))
-                else:
-                    target_results.append(SiteResults(site_conf, run_results))
+            # Remember ordering so we can restore it after concurrent execution
+            order_index = {name: idx for idx, (name, _) in enumerate(sites_for_target)}
 
+            # Reasonable cap on workers
+            # Use the smaller of: user-specified workers or number of sites
+            max_workers = min(self.args.workers, len(sites_for_target))
+
+            with ThreadPoolExecutor(max_workers=max_workers) as executor:
+                futures = [
+                    executor.submit(
+                        _run_single_site_for_target,
+                        site_name,
+                        site_conf,
+                        target_info,
+                        creds,
+                        proxies,
+                        self.args.verbose,
+                        timeout_seconds=15,
+                        delay_seconds=int(self.args.delay),
+                    )
+                    for (site_name, site_conf) in sites_for_target
+                ]
+
+                for fut in as_completed(futures):
+                    site_result = fut.result()
+                    if site_result is not None:
+                        target_results.append(site_result)
+
+            # Re-sort results to match original site order
+            def _sort_key(res):
+                site_info = res.site_info
+                site_name = site_info.get("name", "")
+                return order_index.get(site_name, 0)
+
+            target_results.sort(key=_sort_key)
+
+            # Yield the ResultSet for this target (same as before)
             yield ResultSet(target_info, target_results)
 
     @property
