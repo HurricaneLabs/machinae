@@ -136,6 +136,7 @@ Machinae comes with out-of-the-box support for the following data sources:
 - URLVoid
 - URL Unshortener (http://www.toolsvoid.com/unshorten-url)
 - Malc0de
+- NetAPI Compromised Check (compromised domain and IP feed, no API key)
 - SANS
 - FreeGeoIP (freegeoip.io)
 - Fortinet Category

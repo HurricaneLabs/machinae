@@ -191,6 +191,31 @@ malc0de:
         - malc0de_md5
       pretty_name: MC MD5
 
+netapi_compromised:
+  name: NetAPI Compromised Check
+  otypes:
+    - ipv4
+    - fqdn
+  json:
+    request:
+      url: 'https://netapi.com/api-json/?method=compromised-check&value={target}'
+      method: get
+    results:
+    - key: listed_now
+      pretty_name: NetAPI Listed Now
+    - key: listed_ever
+      pretty_name: NetAPI Listed Ever
+    - key: matched_value
+      pretty_name: NetAPI Matched Entry
+    - key: first_seen
+      pretty_name: NetAPI First Seen
+    - key: last_seen
+      pretty_name: NetAPI Last Seen
+    - key: block_reason
+      pretty_name: NetAPI Reported By
+    - key: note
+      pretty_name: NetAPI Note
+
 AbuseIPDB:
   name: AbuseIPDB
   otypes:
