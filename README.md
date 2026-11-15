@@ -160,6 +160,7 @@ Machinae comes with out-of-the-box support for the following data sources:
 - Metadefender Cloud (Requires API key)
 - GreyNoise (Requires API key)
 - IBM XForce (Required API key)
+- InternetData (disabled by default)
 
 With additional data sources on the way.
 
@@ -206,6 +207,7 @@ The following sites are disabled by default
 - Metadefender Cloud (Requires API key)
 - GreyNoise (Requires API key)
 - IBM XForce (Requires API key)
+- InternetData (`internetdata`)
 
 Output Formats
 --------------
