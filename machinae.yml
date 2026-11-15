@@ -1479,3 +1479,29 @@ ip2locationio:
               pretty_name: ip2location.io zipcode
             - key: is_proxy
               pretty_name: ip2location.io is proxy or not
+internetdata:
+    name: InternetData
+    default: False
+    otypes:
+        - ipv4
+        - ipv6
+    json:
+        request:
+            url: https://api.internetdata.io/{target}
+        results:
+            - key: hostname
+              pretty_name: internetdata.io hostname
+            - key: location.country_name
+              pretty_name: internetdata.io country
+            - key: asn.asn
+              pretty_name: internetdata.io ASN
+            - key: asn.name
+              pretty_name: internetdata.io AS name
+            - key: company.name
+              pretty_name: internetdata.io company
+            - key: company.domain
+              pretty_name: internetdata.io company domain
+            - key: abuse.email
+              pretty_name: internetdata.io abuse email
+            - key: is_tor
+              pretty_name: internetdata.io is Tor
